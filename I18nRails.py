@@ -49,14 +49,14 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 				child  = self.locales_path.file_name() 		# action
 
 				# Move one level
-				dict_to_modify = yaml_dict[parent]
+				dict_to_modify = dict_to_modify[parent]
 
 				# If the key doesn't exist create it
 				if not child in dict_to_modify:
 					dict_to_modify[child] = {}
 
 				# Move another level
-				dict_to_modify = yaml_dict[child]
+				dict_to_modify = dict_to_modify[child]
 
 				# Remove the dot	
 				last_key = self.selected_text[1:]
