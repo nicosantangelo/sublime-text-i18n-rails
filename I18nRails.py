@@ -1,4 +1,5 @@
 import sublime, sublime_plugin, os
+from . import pyyaml
 
 class I18nRailsCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
@@ -39,8 +40,11 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 			self.current_locale = None
 
 	def write_text(self, text):
-		print(text)
-		print(self.current_locale)
+		yaml_path = self.path.locales_path + self.current_locale
+		print(yaml_path)
+
+		stream = open(yaml_path, 'r')
+		print(pyyaml.load(stream))
 
 	def show_input_panel(self, message, on_done):
 		self.view.window().show_input_panel(message, "", on_done, None, None)
