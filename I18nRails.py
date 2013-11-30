@@ -3,10 +3,10 @@ import sublime, sublime_plugin, os
 class I18nRailsCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		# Path helper
-		path = LocalesPath(self.view.file_name())
+		self.path = LocalesPath(self.view.file_name())
 
 		# Every locale will be stored here
-		locales = set()
+		self.locales = set()
 
 		# Take highlighted text
 		selections = self.view.sel()
@@ -17,20 +17,30 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 
 			# If the text starts with a dot, parse the text and search in ../config/locales/views/folder_name/*.yml
 			if selected_text.startswith("."):
-				path.move_to_modelname()
+				self.path.move_to_modelname()
 
 			# Store every language (en, es, etc.) with the extension
-			locales |= set(path.file_names(".yml"))
+			self.locales |= set(self.path.file_names(".yml"))
 
 			# Prompt an input to place the translation foreach language
-			for locale in locales:
-				self.show_input_panel(locale, self.test)
+			self.process_locales(None)
 
-		 	# Write the files keeping in mind the presence (or lack of) a dot to place the keys in the yml
 
-	def test(self, text):
-		self.show_input_panel("asdasd", None)
+	def process_locales(self, user_text):
+		# Write the files keeping in mind the presence (or lack of) a dot to place the keys in the yml
+		if user_text:
+			self.write_text(user_text)
+
+		# Continue showing the prompts
+		if len(self.locales) > 0:
+			self.current_locale = self.locales.pop()
+			self.show_input_panel(self.current_locale, self.process_locales)
+		else:
+			self.current_locale = None
+
+	def write_text(self, text):
 		print(text)
+		print(self.current_locale)
 
 	def show_input_panel(self, message, on_done):
 		self.view.window().show_input_panel(message, "", on_done, None, None)
