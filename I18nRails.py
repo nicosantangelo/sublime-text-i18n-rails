@@ -3,11 +3,8 @@ from . import pyyaml
 
 class I18nRailsCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
-		# Path helper
-		self.path = Path(self.view.file_name())
-
-		# Every locale will be stored here
-		self.locales = Locales()
+		# Facade between path and locales
+		self.locales_path = LocalesPath(self.view.file_name())
 
 		# Take highlighted text
 		selections = self.view.sel()
@@ -18,25 +15,26 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 
 			# If the text starts with a dot, parse the text and search in ../config/locales/views/folder_name/*.yml
 			if selected_text.startswith("."):
-				self.path.move_to_modelname()
+				self.locales_path.move_to_modelname()
 
 			# Store every language (en, es, etc.) with the extension
-			self.locales.add(self.path.file_names(".yml"))
+			self.locales_path.add()
 
 			# Prompt an input to place the translation foreach language
-			self.process_locales(None)
+			self.process(None)
 
-	def process_locales(self, user_text):
+	def process(self, user_text):
 		# Write the files keeping in mind the presence (or lack of) a dot to place the keys in the yml
 		if user_text:
 			self.write_text(user_text)
 
-		if self.locales.process():
-			self.show_input_panel(self.locales.current_locale, self.process_locales)
+		locale = self.locales_path.process()
+		if locale:
+			self.show_input_panel(locale, self.process)
 
 	def write_text(self, text):
 		# Get the path of the yml file
-		yaml_path = self.path.locales + self.locales.current_locale
+		yaml_path = self.locales_path.yaml()
 		print(yaml_path)
 
 		# Transform it to an dic
@@ -49,7 +47,7 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 		#      file_name:
 		#        selected_text: text
 
-		# Find the full path file name key on the dict inside 
+		# Find the full paths file name key on the dict inside 
 
 		# If it doesn't exist create it
 
@@ -59,6 +57,27 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 
 	def show_input_panel(self, message, on_done):
 		self.view.window().show_input_panel(message, "", on_done, None, None)
+
+
+class LocalesPath():
+	def __init__(self, full_path):
+		# Path helper
+		self.path = Path(full_path)
+
+		# Every locale will be stored here
+		self.locales = Locales()
+
+	def move_to_modelname(self):
+		self.path.move_to_modelname()
+
+	def add(self):
+		self.locales.add(self.path.file_names(".yml"))
+
+	def process(self):
+		return self.locales.process()
+
+	def yaml(self):
+		return self.path.locales + self.locales.current_locale
 
 
 class Locales():
@@ -71,7 +90,6 @@ class Locales():
 
 	def process(self):
 		self.current_locale = self.locales.pop() if len(self.locales) > 0 else None
-		
 		return self.current_locale
 
 
