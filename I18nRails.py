@@ -17,23 +17,20 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 			if self.selected_text.startswith("."):
 				self.locales_path.move_to_modelname()
 
-				# Remove the dot	
-				self.selected_text = self.selected_text[1:]
-
 			# Store every language (en, es, etc.) with the extension
 			self.locales_path.add()
 
 			# Prompt an input to place the translation foreach language
-			self.process(None)
+			self.process()
 
-	def process(self, user_text):
+	def process(self, user_text = None):
 		# Write the files keeping in mind the presence (or lack of) a dot to place the keys in the yml
 		if user_text:
 			self.write_text(user_text)
 
 		locale = self.locales_path.process()
 		if locale:
-			self.show_input_panel(locale, self.process)
+			self.show_input_panel(locale, self.process, None, self.process)
 
 	def write_text(self, text):
 		# Get the path of the yml file
@@ -43,25 +40,39 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 		with open(yaml_path, 'r+') as yaml_file:
 			yaml_dict = pyyaml.load(yaml_file)
 
-			# Final result (dot)
-			#  locale_name: 
-			#    modelname:
-			#      file_name:
-			#        selected_text: text
-
 			# Find the full paths file name key on the dict inside 
 			root   = self.locales_path.locale_name() 	# es
-			parent = self.locales_path.path.modelname() # accounts
-			child  = self.locales_path.file_name() 		# index
+			dict_to_modify = yaml_dict[root]
 
-			dict_to_modify = yaml_dict[root][parent]
+			if self.selected_text.startswith("."):
+				parent = self.locales_path.path.modelname() # model
+				child  = self.locales_path.file_name() 		# action
 
-			# If it doesn't exist create it
-			if not child in dict_to_modify:
-				dict_to_modify[child] = {}
+				# Move one level
+				dict_to_modify = yaml_dict[parent]
+
+				# If the key doesn't exist create it
+				if not child in dict_to_modify:
+					dict_to_modify[child] = {}
+
+				# Move another level
+				dict_to_modify = yaml_dict[child]
+
+				# Remove the dot	
+				last_key = self.selected_text[1:]
+			else:
+				# Move on the yaml file and get the last key
+				keys = self.selected_text.split(".")
+				last_key = keys.pop()
+
+				for key in keys:
+					if not key in dict_to_modify:
+						dict_to_modify[key] = {}
+
+					dict_to_modify = dict_to_modify[key]
 
 			# Add the selected text as a new key inside the file_name key with the text as a value
-			dict_to_modify[child][self.selected_text] = text
+			dict_to_modify[last_key] = text
 
 			# Save the file
 			self.write_yaml_file(yaml_file, yaml_dict)
@@ -71,8 +82,8 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 		yaml_file.write( pyyaml.dump(data_to_write, default_flow_style = False) )
 		yaml_file.truncate()
 
-	def show_input_panel(self, message, on_done):
-		self.view.window().show_input_panel(message, "", on_done, None, None)
+	def show_input_panel(self, message, on_done = None, on_change = None, on_cancel = None):
+		self.view.window().show_input_panel(message, "", on_done, on_change, on_cancel)
 
 
 class LocalesPath():
@@ -121,7 +132,7 @@ class Locales():
 class Path():
 	def __init__(self, full_path):
 		self.full = full_path
-		self.locales = os.path.abspath(os.path.join(self.dirname(), "..", "..", "..", "config", "locales"))
+		self.locales = os.path.abspath(os.path.join(self.dirname(), "..", "..", "..", "config", "locales")) + "/"
 
 	def move_to_modelname(self):
 		self.locales += "/views/" + self.modelname() + "/"
