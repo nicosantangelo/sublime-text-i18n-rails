@@ -11,11 +11,14 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 
 		# For each selection
 		for selection in selections:
-			selected_text = self.view.substr(selection)
+			self.selected_text = self.view.substr(selection)
 
 			# If the text starts with a dot, parse the text and search in ../config/locales/views/folder_name/*.yml
-			if selected_text.startswith("."):
+			if self.selected_text.startswith("."):
 				self.locales_path.move_to_modelname()
+
+				# Remove the dot	
+				self.selected_text = self.selected_text[1:]
 
 			# Store every language (en, es, etc.) with the extension
 			self.locales_path.add()
@@ -35,25 +38,38 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 	def write_text(self, text):
 		# Get the path of the yml file
 		yaml_path = self.locales_path.yaml()
-		print(yaml_path)
 
 		# Transform it to an dic
-		stream = open(yaml_path, 'r')
-		print(pyyaml.load(stream))
+		with open(yaml_path, 'r+') as yaml_file:
+			yaml_dict = pyyaml.load(yaml_file)
 
-		# Final result (dot)
-		#  locale_name: 
-		#    modelname:
-		#      file_name:
-		#        selected_text: text
+			# Final result (dot)
+			#  locale_name: 
+			#    modelname:
+			#      file_name:
+			#        selected_text: text
 
-		# Find the full paths file name key on the dict inside 
+			# Find the full paths file name key on the dict inside 
+			root   = self.locales_path.locale_name() 	# es
+			parent = self.locales_path.path.modelname() # accounts
+			child  = self.locales_path.file_name() 		# index
 
-		# If it doesn't exist create it
+			dict_to_modify = yaml_dict[root][parent]
 
-		# Add the selected text (removing the dot) as a new key inside the file_name key with the text as a value
+			# If it doesn't exist create it
+			if not child in dict_to_modify:
+				dict_to_modify[child] = {}
 
-		# Save the file
+			# Add the selected text as a new key inside the file_name key with the text as a value
+			dict_to_modify[child][self.selected_text] = text
+
+			# Save the file
+			self.write_yaml_file(yaml_file, yaml_dict)
+
+	def write_yaml_file(self, yaml_file, data_to_write):
+		yaml_file.seek(0)
+		yaml_file.write( pyyaml.dump(data_to_write, default_flow_style = False) )
+		yaml_file.truncate()
 
 	def show_input_panel(self, message, on_done):
 		self.view.window().show_input_panel(message, "", on_done, None, None)
@@ -79,6 +95,15 @@ class LocalesPath():
 	def yaml(self):
 		return self.path.locales + self.locales.current_locale
 
+	def modelname(self):
+		return self.path.modelname()
+
+	def file_name(self):
+		return Path.remove_extension(self.path.file_name())
+
+	def locale_name(self):
+		return Path.remove_extension(self.locales.current_locale)
+
 
 class Locales():
 	def __init__(self):
@@ -96,7 +121,7 @@ class Locales():
 class Path():
 	def __init__(self, full_path):
 		self.full = full_path
-		self.locales = os.path.abspath(os.path.join(self.dirname(), '..', '..', '..', 'config', 'locales'))
+		self.locales = os.path.abspath(os.path.join(self.dirname(), "..", "..", "..", "config", "locales"))
 
 	def move_to_modelname(self):
 		self.locales += "/views/" + self.modelname() + "/"
@@ -117,5 +142,15 @@ class Path():
 	def file_has_extension(self, file_path, extension):
 		return self.file_extension(file_path) == extension or extension == ""
 
-	def file_extension(self, file_path):
+	def file_extension(self, file_path = None):
+		file_path = file_path or self.full
 		return os.path.splitext(file_path)[1]
+
+	def file_name(self, file_path = None):
+		file_path = file_path or self.full
+		return os.path.basename(file_path)
+
+	@classmethod
+	def remove_extension(cls, file_name):
+	    name, sep, ext = file_name.partition(".")
+	    return name
