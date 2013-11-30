@@ -61,10 +61,10 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 				# Remove the dot	
 				last_key = self.selected_text[1:]
 			else:
-				# Move on the yaml file and get the last key
 				keys = self.selected_text.split(".")
 				last_key = keys.pop()
 
+				# Move on the yaml file
 				for key in keys:
 					if not key in dict_to_modify:
 						dict_to_modify[key] = {}
