@@ -79,7 +79,7 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 
 	def write_yaml_file(self, yaml_file, data_to_write):
 		yaml_file.seek(0)
-		yaml_file.write( pyyaml.dump(data_to_write, default_flow_style = False) )
+		yaml_file.write( pyyaml.dump(data_to_write, default_flow_style = False, allow_unicode=True, encoding = None) )
 		yaml_file.truncate()
 
 	def show_input_panel(self, message, on_done = None, on_change = None, on_cancel = None):
