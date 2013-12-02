@@ -1,0 +1,3 @@
+[
+    { "keys": ["ctrl+alt+i"], "command": "i18n_rails" }
+]
