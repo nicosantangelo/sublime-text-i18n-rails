@@ -17,11 +17,16 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
             if self.selected_text.startswith("."):
                 self.locales_path.move_to_modelname()
 
-            # Store every language (en, es, etc.) with the extension
-            self.locales_path.add()
+            try:
+                # Store every language (en, es, etc.) with the extension
+                self.locales_path.add()
+            except FileNotFoundError:
+                self.display_message(self.locales_path.yaml() + " doesn't exist. Are you in a view?")
+                continue
 
             # Prompt an input to place the translation foreach language
             self.process()
+
 
     def process(self, user_text = None):
         # Write the files keeping in mind the presence (or lack of) a dot to place the keys in the yml
@@ -77,6 +82,8 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
             # Save the file
             self.write_yaml_file(yaml_file, yaml_dict)
 
+            self.display_message("{0}: {1} created!".format(last_key, text))
+
     def write_yaml_file(self, yaml_file, data_to_write):
         yaml_file.seek(0)
         yaml_file.write( pyyaml.dump(data_to_write, default_flow_style = False, allow_unicode=True, encoding = None) )
@@ -85,6 +92,8 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
     def show_input_panel(self, message, on_done = None, on_change = None, on_cancel = None):
         self.view.window().show_input_panel(message, "", on_done, on_change, on_cancel)
 
+    def display_message(self, text):
+      sublime.active_window().active_view().set_status("i18_rails", text)
 
 class LocalesPath():
     def __init__(self, full_path):
