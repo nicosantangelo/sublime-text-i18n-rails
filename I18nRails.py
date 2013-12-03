@@ -46,35 +46,22 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
             yaml_dict = pyyaml.load(yaml_file)
 
             # Find the full paths file name key on the dict inside 
-            root   = self.locales_path.locale_name()    # es
+            root = self.locales_path.locale_name() # es/en/...
             dict_to_modify = yaml_dict[root]
 
             if self.selected_text.startswith("."):
-                parent = self.locales_path.path.modelname() # model
-                child  = self.locales_path.file_name()      # action
-
-                # Move one level
-                dict_to_modify = dict_to_modify[parent]
-
-                # If the key doesn't exist create it
-                if not child in dict_to_modify:
-                    dict_to_modify[child] = {}
-
-                # Move another level
-                dict_to_modify = dict_to_modify[child]
+                # [model, child]
+                keys = [self.locales_path.path.modelname(), self.locales_path.file_name()]
 
                 # Remove the dot    
                 last_key = self.selected_text[1:]
             else:
+                #[ key1, key2, ...]
                 keys = self.selected_text.split(".")
                 last_key = keys.pop()
 
-                # Move on the yaml file
-                for key in keys:
-                    if not key in dict_to_modify:
-                        dict_to_modify[key] = {}
-
-                    dict_to_modify = dict_to_modify[key]
+            # Move on the yaml file
+            dict_to_modify = self.traverse_yml(dict_to_modify, keys)
 
             # Add the selected text as a new key inside the file_name key with the text as a value
             dict_to_modify[last_key] = text
@@ -83,6 +70,15 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
             self.write_yaml_file(yaml_file, yaml_dict)
 
             self.display_message("{0}: {1} created!".format(last_key, text))
+
+    def traverse_yml(self, yml_dict, keys):
+        for key in keys:
+            if not key in yml_dict:
+                yml_dict[key] = {}
+
+            yml_dict = yml_dict[key]
+
+        return yml_dict
 
     def write_yaml_file(self, yaml_file, data_to_write):
         yaml_file.seek(0)
@@ -94,6 +90,7 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 
     def display_message(self, text):
       sublime.active_window().active_view().set_status("i18_rails", text)
+
 
 class LocalesPath():
     def __init__(self, full_path):
