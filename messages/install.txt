@@ -1,0 +1,14 @@
+QuickStart (sorry for the interruption)
+=====================
+To use the plugin, go to a Rails view select the key where you want to add a value to and run the command "I18n Rails: Add key"
+
+For example, select '.hello' or 'some.other.key.bye' in your view and run the plugin:
+
+    # index.html.erb
+    <%= t('.hello') %> 
+    <!-- (...) -->
+    <%= t('some.other.key.bye') %>
+
+Repo
+--------------------------
+    https://github.com/NicoSantangelo/sublime-text-i18n-rails
