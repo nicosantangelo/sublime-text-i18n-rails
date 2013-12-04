@@ -26,8 +26,6 @@ class LocalesPath():
 
     def file_name(self):
         file_name = Path.remove_extension(self.path.file_name())
-        print(file_name)
-        print(file_name[1:])
         return file_name[1:] if file_name.startswith("_") else file_name
 
     def locale_name(self):
