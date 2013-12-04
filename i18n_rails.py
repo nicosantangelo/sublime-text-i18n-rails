@@ -1,6 +1,6 @@
 import sublime, sublime_plugin
-from I18nRails import pyyaml
-from I18nRails.locales_path import LocalesPath
+from . import pyyaml
+from .locales_path import LocalesPath
 
 class I18nRailsCommand(sublime_plugin.TextCommand):
     def run(self, edit):

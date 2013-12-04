@@ -1,5 +1,5 @@
-from I18nRails.locales import Locales
-from I18nRails.path    import Path
+from .locales import Locales
+from .path    import Path
 
 class LocalesPath():
     def __init__(self, full_path):
