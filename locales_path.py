@@ -25,7 +25,10 @@ class LocalesPath():
         return self.path.modelname()
 
     def file_name(self):
-        return Path.remove_extension(self.path.file_name())
+        file_name = Path.remove_extension(self.path.file_name())
+        print(file_name)
+        print(file_name[1:])
+        return file_name[1:] if file_name.startswith("_") else file_name
 
     def locale_name(self):
         return Path.remove_extension(self.locales.current_locale)
