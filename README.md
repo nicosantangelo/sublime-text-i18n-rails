@@ -12,14 +12,14 @@ The plugin supports relative and absolute routes, for example
 ````erb
 <%# views/users/index.html.erb %>
 
-<%= t('.hello') %>  <%# It will search in config/locales/views/users/*.yml %>
+<%= t('.hello') %>  <%# It will search in config/locales/views/users/*.yml (see note below) %>
 
 <%# (...) %>
 
 <%= t('some.other.key.bye') %> <%# It will search in config/locales/*.yml %>
 ````
 
-Right now the plugin wont create a missing file or folder, and the relative path is fixed, but the idea [is making this configurable][2].
+**Note:** If the plugin doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`
 
 ## Shortcut Keys
 
@@ -33,16 +33,11 @@ Right now the plugin wont create a missing file or folder, and the relative path
 
 ## Installation
 
-This package is available in [Package Control][3] or you can clone the repo into your package folder (use Package Control, is awesome).
-
-## Roadmap
- - Setting to create missing files
- - Setting to configure the default relative path
+This package is available in [Package Control][2] or you can clone the repo into your package folder (use Package Control, is awesome).
 
 ## License
-[MIT][4]
+[MIT][3]
 
   [1]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#shortcut-keys
-  [2]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#roadmap
-  [3]: https://sublime.wbond.net/
-  [4]: https://raw.github.com/NicoSantangelo/sublime-text-i18n-rails/master/LICENSE
+  [2]: https://sublime.wbond.net/
+  [3]: https://raw.github.com/NicoSantangelo/sublime-text-i18n-rails/master/LICENSE
