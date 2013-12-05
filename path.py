@@ -6,7 +6,9 @@ class Path():
         self.locales = os.path.abspath(os.path.join(self.dirname(), "..", "..", "..", "config", "locales")) + "/"
 
     def move_to_modelname(self):
-        self.locales += "/views/" + self.modelname() + "/"
+        new_path = self.locales + "/views/" + self.modelname() + "/"
+        if os.path.isdir(new_path):
+            self.locales = new_path
         return self
 
     def modelname(self):
