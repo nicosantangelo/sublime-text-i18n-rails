@@ -1,6 +1,22 @@
-import sublime, sublime_plugin
+import sublime, sublime_plugin, re
 from .locales_path import LocalesPath
 from .yaml import Yaml
+
+class I18nRailsToggleCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        global i18n_rails_keys_enabled
+
+        # Default value
+        if i18n_rails_keys_enabled is None:
+            i18n_rails_keys_enabled = False 
+
+        if i18n_rails_keys_enabled:
+            view_matches = self.view.find_all('\s*(?:I18n\.)?t\(["\'](\.?[\w\.]+)["\']\)\s*')
+            self.view.add_regions('WordHighlight', view_matches, "invalid.deprecated", "", sublime.DRAW_NO_FILL)
+        else:
+            self.view.erase_regions('WordHighlight')
+
+        i18n_rails_keys_enabled = not i18n_rails_keys_enabled
 
 class I18nRailsCommand(sublime_plugin.TextCommand):
     def run(self, edit):

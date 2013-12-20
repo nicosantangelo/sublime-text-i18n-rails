@@ -2,4 +2,9 @@
   "id": "i18nrails",
   "caption": "I18n Rails: Add key",
   "command": "i18n_rails"
+},
+{
+  "id": "i18nrailstoggle",
+  "caption": "I18n Rails: Toggle key highlighting",
+  "command": "i18n_rails_toggle"
 }]
