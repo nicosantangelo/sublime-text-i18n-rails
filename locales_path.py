@@ -22,7 +22,7 @@ class LocalesPath():
         return self.locales.process()
 
     def yaml(self):
-        return self.path.locales + self.locales.current_locale
+        return self.path.i18n + self.locales.current_locale
 
     def modelname(self):
         return self.path.modelname()
