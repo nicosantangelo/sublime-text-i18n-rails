@@ -12,8 +12,11 @@ class LocalesPath():
     def move_to_modelname(self):
         self.path.move_to_modelname()
 
+    def go_back(self):
+        self.path.go_back()
+
     def add(self):
-        self.locales.add(self.path.file_names(".yml"))
+       self.locales.add(self.path.file_names(".yml"))
 
     def process(self):
         return self.locales.process()
@@ -30,3 +33,6 @@ class LocalesPath():
 
     def locale_name(self):
         return Path.remove_extension(self.locales.current_locale)
+
+    def locales_len(self):
+        return len(self.locales.names)

@@ -6,17 +6,61 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         global i18n_rails_keys_enabled
 
+        self.regions = { 'valid': ([], "string"), 'partial': ([], "comment"), 'invalid': ([], "invalid") }
+
         # Default value
-        if i18n_rails_keys_enabled is None:
+        if not 'i18n_rails_keys_enabled' in globals():
             i18n_rails_keys_enabled = False 
 
         if i18n_rails_keys_enabled:
-            view_matches = self.view.find_all('\s*(?:I18n\.)?t\(["\'](\.?[\w\.]+)["\']\)\s*')
-            self.view.add_regions('WordHighlight', view_matches, "invalid.deprecated", "", sublime.DRAW_NO_FILL)
+            self.highlight_keys()
         else:
-            self.view.erase_regions('WordHighlight')
+           self.clear_highlighted_keys()
 
         i18n_rails_keys_enabled = not i18n_rails_keys_enabled
+
+    def highlight_keys(self):
+        self.locales_path = LocalesPath(self.view.file_name())
+        self.yaml = Yaml(self.locales_path)
+
+        re_method_calls        = '\s*(?:I18n\.)?t\(["\'](\.?[\w\.]+)["\']\)\s*'
+        re_inside_method_calls = '["\'](\.?[\w\.]+)["\']'
+
+        view_i18n_calls_regions = self.view.find_all(re_method_calls)
+
+        for method_call_region in view_i18n_calls_regions:
+            method_call = self.view.substr(method_call_region)
+            key = re.search(re_inside_method_calls, method_call).group(1)
+            
+            if key.startswith("."):
+                self.locales_path.move_to_modelname()
+            else:
+                self.locales_path.go_back()
+
+            self.locales_path.add()
+
+            self.add_to_regions(method_call_region, key)
+
+        self.paint_highlighted_keys()
+
+    def add_to_regions(self, region, key):
+        translations_count = self.yaml.text_count(key)
+
+        if translations_count == self.locales_path.locales_len():
+            self.regions['valid'][0].append(region)
+        elif translations_count > 0:
+            self.regions['partial'][0].append(region)
+        else:
+            self.regions['invalid'][0].append(region)
+
+    def paint_highlighted_keys(self):
+        for region_name, regions_tuple in self.regions.items():
+
+            self.view.add_regions(region_name, regions_tuple[0], regions_tuple[1], "", sublime.DRAW_NO_FILL)
+
+    def clear_highlighted_keys(self):
+        for region_name in self.regions.keys():
+            self.view.erase_regions(region_name)
 
 class I18nRailsCommand(sublime_plugin.TextCommand):
     def run(self, edit):
@@ -67,4 +111,4 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
         self.view.window().show_input_panel(caption, initial_text, on_done, on_change, on_cancel)
 
     def display_message(self, text):
-      sublime.active_window().active_view().set_status("i18_rails", text)
+        sublime.active_window().active_view().set_status("i18_rails", text)

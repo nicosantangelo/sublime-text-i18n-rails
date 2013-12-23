@@ -3,7 +3,7 @@ from . import pyyaml
 class Yaml():
     def __init__(self, locales_path):
         self.locales_path = locales_path
-        self.reset()
+        self.setup()
 
     def move_to(self, selected_text):
         # Find the full paths file name key on the dict inside 
@@ -51,6 +51,14 @@ class Yaml():
         yaml_file.write( pyyaml.dump(self.yaml_to_write, default_flow_style = False, allow_unicode = True, encoding = None) )
         yaml_file.truncate()
 
+    def text_count(self, key):
+        count = 0
+        while self.locales_path.process():
+            if self.text_from(key): 
+                count += 1
+
+        return count
+
     def traverse(self, keys):
         for key in keys:
             if not key in self.dict or self.dict[key] is None:
@@ -60,7 +68,7 @@ class Yaml():
 
         return self.dict
 
-    def reset(self):
+    def setup(self):
         self.dict = {}
         self.yaml_to_write = {}
         self.last_key = ''
