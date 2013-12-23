@@ -6,7 +6,7 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         global i18n_rails_keys_enabled
 
-        self.regions = { 'valid': ([], "string"), 'partial': ([], "comment"), 'invalid': ([], "invalid") }
+        self.regions = { 'valid': ([], "comment"), 'partial': ([], "string"), 'invalid': ([], "invalid") }
 
         # Default value
         if not 'i18n_rails_keys_enabled' in globals():
@@ -44,9 +44,10 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
         self.paint_highlighted_keys()
 
     def add_to_regions(self, region, key):
+        locales_len = self.locales_path.locales_len()
         translations_count = self.yaml.text_count(key)
 
-        if translations_count == self.locales_path.locales_len():
+        if translations_count == locales_len:
             self.regions['valid'][0].append(region)
         elif translations_count > 0:
             self.regions['partial'][0].append(region)
