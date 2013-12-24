@@ -1,3 +1,4 @@
 [
-    { "keys": ["ctrl+alt+i"], "command": "i18n_rails" }
+    { "keys": ["ctrl+alt+i"], "command": "i18n_rails" },
+    { "keys": ["ctrl+alt+u"], "command": "i18n_rails_toggle" }
 ]

@@ -10,7 +10,7 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
 
         # Default value
         if not 'i18n_rails_keys_enabled' in globals():
-            i18n_rails_keys_enabled = False 
+            i18n_rails_keys_enabled = True 
 
         if i18n_rails_keys_enabled:
             self.highlight_keys()
