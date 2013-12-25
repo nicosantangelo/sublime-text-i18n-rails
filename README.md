@@ -72,7 +72,7 @@ This package is available in [Package Control][2] or you can clone the repo into
 
  * Command to "Go to yml file".
  * Support custom color scopes.
- * <strike>Allow path filtering.</strike>
+ * ~~Allow path filtering.~~
 
 ## License
 [MIT][3]
