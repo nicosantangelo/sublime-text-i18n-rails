@@ -48,6 +48,22 @@ Each translation is looked up in the relative or absolute path (the same logic a
  * Add:   `super+alt+i` 
  * Toggle: `super+alt+u` 
 
+## Settings
+
+Right now, there's only one available setting
+
+````json
+{
+    "rejected_files": []
+}
+````
+
+You can add to the array any file you want to skip in when you're running the adding or check commands. So for example, if you want to skip devise files:
+
+` { "rejected_files": ["devise.es.yml", "devise.en.yml"] }`
+
+The settings are accesible from Menu -> Preferences -> Package settings -> I18nRails
+
 ## Installation
 
 This package is available in [Package Control][2] or you can clone the repo into your package folder (use Package Control, is awesome).
@@ -56,7 +72,7 @@ This package is available in [Package Control][2] or you can clone the repo into
 
  * Command to "Go to yml file".
  * Support custom color scopes.
- * Allow path filtering.
+ * <strike>Allow path filtering.</strike>
 
 ## License
 [MIT][3]
