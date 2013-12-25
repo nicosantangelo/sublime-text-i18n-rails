@@ -69,6 +69,9 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
         # Facade between path and locales
         self.locales_path = LocalesPath(self.view.file_name())
 
+        # Object to read and parse a yaml file
+        self.yaml = Yaml(self.locales_path)
+
         # Take highlighted text
         selections = self.view.sel()
 
@@ -104,12 +107,10 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
             self.show_input_panel(locale, existing_text, self.process, None, self.process)
 
     def existing_text_from_yaml(self):
-        self.yaml = Yaml(self.locales_path)
         return self.yaml.text_from(self.selected_text)
 
     def write_text(self, text):
         self.yaml.write_text(text)
-
         self.display_message("{0}: {1} created!".format(self.selected_text, text))
 
     def show_input_panel(self, caption, initial_text = "", on_done = None, on_change = None, on_cancel = None):
