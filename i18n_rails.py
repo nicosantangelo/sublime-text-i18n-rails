@@ -28,6 +28,8 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
 
         view_i18n_calls_regions = self.view.find_all(re_method_calls)
 
+        rejected_files = sublime.load_settings("I18nRails.sublime-settings").get("rejected_files")
+
         for method_call_region in view_i18n_calls_regions:
             method_call = self.view.substr(method_call_region)
             key = re.search(re_inside_method_calls, method_call).group(1)
@@ -37,7 +39,7 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
             else:
                 self.locales_path.go_back()
 
-            self.locales_path.add()
+            self.locales_path.add(rejected_files)
 
             self.add_to_regions(method_call_region, key)
 
@@ -56,7 +58,6 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
 
     def paint_highlighted_keys(self):
         for region_name, regions_tuple in self.regions.items():
-
             self.view.add_regions(region_name, regions_tuple[0], regions_tuple[1], "", sublime.DRAW_NO_FILL)
 
     def clear_highlighted_keys(self):
@@ -71,6 +72,9 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
         # Take highlighted text
         selections = self.view.sel()
 
+        # Get the rejected file names from the settings
+        rejected_files = sublime.load_settings("I18nRails.sublime-settings").get("rejected_files")
+
         # For each selection
         for selection in selections:
             self.selected_text = self.view.substr(selection)
@@ -80,8 +84,8 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
                 self.locales_path.move_to_modelname()
 
             try:
-                # Store every language (en, es, etc.) with the extension
-                self.locales_path.add()
+                # Store every language (en, es, etc.) with the extension, except for the rejected files
+                self.locales_path.add(rejected_files)
             except FileNotFoundError:
                 self.display_message(self.locales_path.yaml() + " doesn't exist. Are you in a view?")
                 continue

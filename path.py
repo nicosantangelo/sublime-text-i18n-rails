@@ -24,8 +24,8 @@ class Path():
     def dirname(self):
         return os.path.dirname(self.full)
 
-    def file_names(self, extension = ""):
-        return [f for f in os.listdir(self.i18n) if self.is_file(f) and self.file_has_extension(f, extension)]
+    def file_names(self, extension = "", rejected = []):
+        return [f for f in os.listdir(self.i18n) if self.is_file(f) and self.file_has_extension(f, extension) and f not in rejected]
 
     def is_file(self, file_path):
         return os.path.isfile(os.path.join(self.i18n, file_path))

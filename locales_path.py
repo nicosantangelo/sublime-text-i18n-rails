@@ -15,8 +15,8 @@ class LocalesPath():
     def go_back(self):
         self.path.go_back()
 
-    def add(self):
-       self.locales.add(self.path.file_names(".yml"))
+    def add(self, rejected = []):
+        self.locales.add(self.path.file_names(".yml", rejected))
 
     def process(self):
         return self.locales.process()
