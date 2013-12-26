@@ -30,7 +30,7 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
         self.locales_path = LocalesPath(self.view.file_name())
         self.yaml = Yaml(self.locales_path)
 
-        method_call_regions = self.view.find_all('\s*(?:I18n\.)?t\(["\'](\.?[\w\.]+)["\']\)\s*')
+        method_call_regions = self.view.find_all('\s*(?:I18n\.)?t(?:\(|\s+)["\'](\.?[\w\.]+)["\']\)?\s*')
 
         for method_call_region in method_call_regions:
             key = self.find_key_in_method_call(method_call_region)
