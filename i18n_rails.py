@@ -23,27 +23,20 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
         self.locales_path = LocalesPath(self.view.file_name())
         self.yaml = Yaml(self.locales_path)
 
-        re_method_calls        = '\s*(?:I18n\.)?t\(["\'](\.?[\w\.]+)["\']\)\s*'
-        re_inside_method_calls = '["\'](\.?[\w\.]+)["\']'
+        method_call_regions = self.view.find_all('\s*(?:I18n\.)?t\(["\'](\.?[\w\.]+)["\']\)\s*')
 
-        view_i18n_calls_regions = self.view.find_all(re_method_calls)
+        helper = CommandHelper(self)
 
-        rejected_files = sublime.load_settings("I18nRails.sublime-settings").get("rejected_files")
-
-        for method_call_region in view_i18n_calls_regions:
-            method_call = self.view.substr(method_call_region)
-            key = re.search(re_inside_method_calls, method_call).group(1)
+        for method_call_region in method_call_regions:
+            key = self.find_key_in_method_call(method_call_region)
             
-            if key.startswith("."):
-                self.locales_path.move_to_modelname()
-            else:
-                self.locales_path.go_back()
-
-            self.locales_path.add(rejected_files)
-
-            self.add_to_regions(method_call_region, key)
+            if helper.find_files_according_to(key):
+                self.add_to_regions(method_call_region, key)
 
         self.paint_highlighted_keys()
+
+    def find_key_in_method_call(self, method_call_region):
+        return re.search('["\'](\.?[\w\.]+)["\']', self.view.substr(method_call_region)).group(1)
 
     def add_to_regions(self, region, key):
         locales_len = self.locales_path.locales_len()
@@ -72,29 +65,18 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
         # Object to read and parse a yaml file
         self.yaml = Yaml(self.locales_path)
 
+        helper = CommandHelper(self)
+
         # Take highlighted text
         selections = self.view.sel()
-
-        # Get the rejected file names from the settings
-        rejected_files = sublime.load_settings("I18nRails.sublime-settings").get("rejected_files")
 
         # For each selection
         for selection in selections:
             self.selected_text = self.view.substr(selection)
 
-            # If the text starts with a dot, parse the text and search in ../config/locales/views/folder_name/*.yml
-            if self.selected_text.startswith("."):
-                self.locales_path.move_to_modelname()
-
-            try:
-                # Store every language (en, es, etc.) with the extension, except for the rejected files
-                self.locales_path.add(rejected_files)
-            except FileNotFoundError:
-                self.display_message(self.locales_path.yaml() + " doesn't exist. Are you in a view?")
-                continue
-
-            # Prompt an input to place the translation foreach language
-            self.process()
+            if helper.find_files_according_to(self.selected_text):
+                # Prompt an input to place the translation foreach language
+                self.process()
 
     def process(self, user_text = None):
         # Write the files keeping in mind the presence (or lack of) a dot to place the keys in the yml
@@ -116,5 +98,25 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
     def show_input_panel(self, caption, initial_text = "", on_done = None, on_change = None, on_cancel = None):
         self.view.window().show_input_panel(caption, initial_text, on_done, on_change, on_cancel)
 
-    def display_message(self, text):
-        sublime.active_window().active_view().set_status("i18_rails", text)
+
+class CommandHelper():
+    def __init__(self, command):
+        self.command = command
+        # Get the rejected file names from the settings
+        settings = sublime.load_settings("I18nRails.sublime-settings")
+        self.rejected_files = settings.get("rejected_files", [])
+
+    def find_files_according_to(self, key):
+        # If the text starts with a dot, parse the text and search in ../config/locales/views/folder_name/*.yml, else in ../config/locales/
+        if key.startswith("."):
+            self.command.locales_path.move_to_modelname()
+        else:
+            self.command.locales_path.go_back()
+
+        try:
+            # Store every language (en, es, etc.) with the extension, except for the rejected files
+            self.command.locales_path.add(self.rejected_files)
+            return True
+        except FileNotFoundError:
+            sublime.active_window().active_view().set_status("i18_rails", self.command.locales_path.yaml() + " doesn't exist. Are you in a view?")
+        
