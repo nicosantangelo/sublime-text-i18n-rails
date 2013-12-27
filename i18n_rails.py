@@ -83,14 +83,15 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
         # Take highlighted text
         selection_regions = self.view.sel()
 
+        # Check if there's a selection
         if not selection_regions[0].empty():
-            self.do_something_with(selection_regions)
+            self.process_regions(selection_regions)
         else:
             self.view.run_command("expand_selection", { "to": "scope" }) 
             selection_regions = self.view.sel()
-            self.do_something_with(selection_regions)
+            self.process_regions(selection_regions)
 
-    def do_something_with(self, selection_regions):
+    def process_regions(self, selection_regions):
         # For each selection
         for region in selection_regions:
             self.selected_text = self.view.substr(region)
