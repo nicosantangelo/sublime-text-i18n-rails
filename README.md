@@ -1,13 +1,15 @@
 # Sublime Text: Rails I18n
 
-This plugin is aimed to help you create Internationalization keys.
+This package is aimed to help you create Internationalization keys.
 
 ## Usage
 
 ### Adding keys
 
-To add a key, go to a Rails view, select the key you want to add a value to and [run][1] the command "I18n Rails: Add key".
-The plugin will display a prompt asking for the value in every language available, If the key value is found, the prompt will show it (so it can be edited easily).
+To add a key, go to a Rails view, [select][4] the key you want to add a value to and [run][1] the command "I18n Rails: Add key".
+
+The package will display a prompt asking for the value in every language available, If the key value is found, the prompt will show it (so it can be edited easily). If you don't want to edit a locale, just skip it by pressing Esc.
+
 
 The package supports relative and absolute routes, for example
 
@@ -23,6 +25,12 @@ The package supports relative and absolute routes, for example
 ````
 
 **Note:** If the package doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`
+
+#### Select keys
+To select a key you can:
+
+1. Select the text (with or without quotes), for example, select `this.key` from `<%= t 'this.key' %>`.
+2. Place the cursor inside the quotes and [run][1] "I18n Rails: Add key".
 
 ### Checking keys
 If you want to check which keys in the file are present in the `*.yml` files, you can open up a Rails view and [run][1] "I18n Rails: Toggle key highlighting", resulting in something like this:
@@ -80,3 +88,4 @@ This package is available in [Package Control][2] or you can clone the repo into
   [1]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#shortcut-keys
   [2]: https://sublime.wbond.net/
   [3]: https://raw.github.com/NicoSantangelo/sublime-text-i18n-rails/master/LICENSE
+  [4]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#select-keys
