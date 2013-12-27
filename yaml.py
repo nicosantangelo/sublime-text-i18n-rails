@@ -33,7 +33,7 @@ class Yaml():
         return self.dict[self.last_key] if self.last_key in self.dict else ""
 
     def write_text(self, text):
-        with open(self.locales_path.yaml(), 'w') as yaml_file:
+        with open(self.locales_path.yaml(), 'w', encoding = "utf-8") as yaml_file:
             self.dict[self.last_key] = text
 
             self.write_file(yaml_file)
@@ -41,7 +41,7 @@ class Yaml():
         return self
 
     def read_file(self):
-        with open(self.locales_path.yaml(), 'r') as yaml_file:
+        with open(self.locales_path.yaml(), 'r', encoding = "utf-8") as yaml_file:
             self.dict = self.yaml_to_write = pyyaml.load(yaml_file)
 
         return self.dict
