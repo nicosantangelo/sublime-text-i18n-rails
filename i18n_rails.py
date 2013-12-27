@@ -10,7 +10,7 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
         self.helper = CommandHelper(self)
 
         if not self.helper.in_view():
-            self.display_message("This package only works on rails views (.erb)")
+            self.display_message("This package only works on rails views (.erb)!")
             return 
 
         self.regions = { 'valid': ([], "comment"), 'partial': ([], "string"), 'invalid': ([], "invalid") }
@@ -68,10 +68,10 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
 class I18nRailsCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         # Common operations
-        helper = CommandHelper(self)
+        self.helper = CommandHelper(self)
 
-        if not helper.in_view():
-            self.display_message("This package only works on rails views (.erb)")
+        if not self.helper.in_view():
+            self.display_message("This package only works on rails views (.erb)!")
             return 
 
         # Facade between path and locales
@@ -81,13 +81,25 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
         self.yaml = Yaml(self.locales_path)
 
         # Take highlighted text
-        selections = self.view.sel()
+        selection_regions = self.view.sel()
 
+        # Check if there's a selection
+        if not selection_regions[0].empty():
+            self.process_regions(selection_regions)
+        else:
+            self.view.run_command("expand_selection", { "to": "scope" }) 
+            selection_regions = self.view.sel()
+            self.process_regions(selection_regions)
+
+    def process_regions(self, selection_regions):
         # For each selection
-        for selection in selections:
-            self.selected_text = self.view.substr(selection)
+        for region in selection_regions:
+            self.selected_text = self.view.substr(region)
 
-            if helper.find_files_according_to(self.selected_text):
+            if re.match('^["\'].+["\']$', self.selected_text):
+                self.selected_text = self.selected_text[1:-1]
+
+            if self.helper.find_files_according_to(self.selected_text):
                 # Prompt an input to place the translation foreach language
                 self.process()
 
