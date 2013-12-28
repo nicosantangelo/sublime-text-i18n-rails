@@ -24,7 +24,8 @@ The package supports relative and absolute routes, for example
 <%= t('some.other.key.bye') %> <%# It will search in config/locales/*.yml %>
 ````
 
-**Note:** If the package doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`
+**Note:** If the package doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`.
+**Note2:** The package requires the root key (`es:`, `en:`, etc.) to be present to work.
 
 #### Select keys
 To select a key you can:
