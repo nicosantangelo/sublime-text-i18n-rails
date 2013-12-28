@@ -11,7 +11,7 @@ class Yaml():
 
         if selected_text.startswith("."):
             # [model, child]
-            keys += [self.locales_path.path.modelname(), self.locales_path.file_name()]
+            keys += self.locales_path.splitted_keys()
 
             # Remove the dot    
             self.last_key = selected_text[1:]

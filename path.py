@@ -6,20 +6,31 @@ class Path():
         self.i18n = self.default_path()
 
     def default_path(self):
-        return os.path.abspath(os.path.join(self.dirname(), "..", "..", "..", "config", "locales")) + "/"
+        app_index = self.dirname().index("/app")
+        return os.path.abspath(os.path.join(self.dirname()[:app_index], "config", "locales")) + "/"
 
-    def move_to_modelname(self):
-        new_path = self.i18n + "/views/" + self.modelname() + "/"
+    def move_to_translation_folder(self, new_path = None):
+        """Recursive method: Searches for the directory containing the translations and moves up if it doesn't find it.
+        It will stop searching if the base path was reached. It requires self.i18n to be reseted to be used."""
+        new_path = new_path or self.i18n + "views/" + self.after_views() + "/"
+
         if os.path.isdir(new_path):
-            self.i18n = new_path
+            self.i18n = new_path 
+        else:
+            new_path = os.path.abspath(os.path.join(new_path, os.pardir))
+            if os.path.split(new_path)[1] == 'views':
+                self.i18n = self.default_path()
+            else:
+                self.move_to_translation_folder(new_path + "/")
+
         return self
 
-    def go_back(self):
+    def reset(self):
         self.i18n = self.default_path()
         return self
 
-    def modelname(self):
-        return os.path.split(self.dirname())[1]
+    def after_views(self):
+        return self.dirname().split("/views/")[1]
 
     def dirname(self):
         return os.path.dirname(self.full)

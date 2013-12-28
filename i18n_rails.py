@@ -138,10 +138,10 @@ class CommandHelper():
 
     def find_files_according_to(self, key):
         # If the text starts with a dot, parse the text and search in ../config/locales/views/folder_name/*.yml, else in ../config/locales/
+        self.command.locales_path.reset()
+
         if key.startswith("."):
-            self.command.locales_path.move_to_modelname()
-        else:
-            self.command.locales_path.go_back()
+            self.command.locales_path.move_to_translation_folder()
 
         try:
             # Store every language (en, es, etc.) with the extension, except for the rejected files

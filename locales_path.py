@@ -9,11 +9,11 @@ class LocalesPath():
         # Every locale will be stored here
         self.locales = Locales()
 
-    def move_to_modelname(self):
-        self.path.move_to_modelname()
+    def move_to_translation_folder(self):
+        self.path.move_to_translation_folder()
 
-    def go_back(self):
-        self.path.go_back()
+    def reset(self):
+        self.path.reset()
 
     def add(self, rejected = []):
         self.locales.add(self.path.file_names(".yml", rejected))
@@ -24,9 +24,6 @@ class LocalesPath():
     def yaml(self):
         return self.path.i18n + self.locales.current_locale
 
-    def modelname(self):
-        return self.path.modelname()
-
     def file_name(self):
         file_name = Path.remove_extension(self.path.file_name())
         return file_name[1:] if file_name.startswith("_") else file_name
@@ -36,3 +33,9 @@ class LocalesPath():
 
     def locales_len(self):
         return len(self.locales.names)
+
+    def splitted_keys(self):
+        return self.path_after_views().split("/") + [self.file_name()]
+
+    def path_after_views(self):
+        return self.path.after_views()
