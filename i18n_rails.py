@@ -10,7 +10,7 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
         self.helper = CommandHelper(self)
 
         if not self.helper.in_view():
-            self.display_message("This package only works on rails views (.erb)!")
+            self.display_message("This package only works on rails views!")
             return 
 
         self.regions = { 'valid': ([], "comment"), 'partial': ([], "string"), 'invalid': ([], "invalid") }
@@ -71,7 +71,7 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
         self.helper = CommandHelper(self)
 
         if not self.helper.in_view():
-            self.display_message("This package only works on rails views (.erb)!")
+            self.display_message("This package only works on rails views!")
             return 
 
         # Facade between path and locales
@@ -134,7 +134,7 @@ class CommandHelper():
         self.rejected_files = settings.get("rejected_files", [])
 
     def in_view(self):
-        return bool(re.search(r'\.erb?$', self.command.view.file_name()))
+        return bool(re.search(r'\.(erb|haml)?$', self.command.view.file_name()))
 
     def find_files_according_to(self, key):
         # If the text starts with a dot, parse the text and search in ../config/locales/views/folder_name/*.yml, else in ../config/locales/
