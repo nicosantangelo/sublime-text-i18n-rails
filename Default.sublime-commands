@@ -7,4 +7,9 @@
   "id": "i18nrailstoggle",
   "caption": "I18n Rails: Toggle key highlighting",
   "command": "i18n_rails_toggle"
+},
+{
+  "id": "i18nrailsgotofile",
+  "caption": "I18n Rails: Go to YAML file",
+  "command": "i18n_rails_go_to_file"
 }]

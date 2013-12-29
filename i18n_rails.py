@@ -2,6 +2,16 @@ import sublime, sublime_plugin, re
 from .locales_path import LocalesPath
 from .yaml import Yaml
 
+class I18nRailsGoToFileCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        # Common operations
+        self.helper = CommandHelper(self)
+
+        if not self.helper.in_view():
+            helper.display_message("This package only works on rails views!")
+            return 
+
+
 class I18nRailsToggleCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         global i18n_rails_keys_enabled
@@ -10,7 +20,7 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
         self.helper = CommandHelper(self)
 
         if not self.helper.in_view():
-            self.display_message("This package only works on rails views!")
+            helper.display_message("This package only works on rails views!")
             return 
 
         self.regions = { 'valid': ([], "comment"), 'partial': ([], "string"), 'invalid': ([], "invalid") }
@@ -62,16 +72,13 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
         for region_name in self.regions.keys():
             self.view.erase_regions(region_name)
 
-    def display_message(self, text):
-        sublime.active_window().active_view().set_status("i18_rails", text)
-
 class I18nRailsCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         # Common operations
         self.helper = CommandHelper(self)
 
         if not self.helper.in_view():
-            self.display_message("This package only works on rails views!")
+            helper.display_message("This package only works on rails views!")
             return 
 
         # Facade between path and locales
@@ -118,13 +125,10 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 
     def write_text(self, text):
         self.yaml.write_text(text)
-        self.display_message("{0}: {1} created!".format(self.selected_text, text))
+        self.helper.display_message("{0}: {1} created!".format(self.selected_text, text))
 
     def show_input_panel(self, caption, initial_text = "", on_done = None, on_change = None, on_cancel = None):
         self.view.window().show_input_panel(caption, initial_text, on_done, on_change, on_cancel)
-
-    def display_message(self, text):
-        sublime.active_window().active_view().set_status("i18_rails", text)
 
 class CommandHelper():
     def __init__(self, command):
@@ -150,3 +154,5 @@ class CommandHelper():
         except FileNotFoundError:
             self.command.display_message(self.command.locales_path.yaml() + " doesn't exist. Are you in a view?")
         
+    def display_message(self, text):
+        sublime.active_window().active_view().set_status("i18_rails", text)
