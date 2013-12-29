@@ -11,6 +11,17 @@ class I18nRailsGoToFileCommand(sublime_plugin.TextCommand):
             helper.display_message("This package only works on rails views!")
             return 
 
+        self.list = ["es.yml", "en.yml"]
+        self.show_quick_panel(self.list, self.open_file, self.preview_file)
+
+    def preview_file(self, index):
+        self.view.window().open_file(self.list[index], sublime.TRANSIENT)
+
+    def open_file(self, index):
+        self.view.window().open_file(self.list[index])
+
+    def show_quick_panel(self, items, on_done, on_highlighted, selected_index = -1):
+        self.view.window().show_quick_panel(items, on_done, sublime.MONOSPACE_FONT, selected_index, on_highlighted)
 
 class I18nRailsToggleCommand(sublime_plugin.TextCommand):
     def run(self, edit):
