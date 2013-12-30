@@ -11,7 +11,34 @@ class I18nRailsGoToFileCommand(sublime_plugin.TextCommand):
             helper.display_message("This package only works on rails views!")
             return 
 
-        self.list = ["es.yml", "en.yml"]
+        self.locales_path = LocalesPath(self.view.file_name())
+
+        selection_regions = self.view.sel()
+
+        if not selection_regions[0].empty():
+            self.process_regions(selection_regions)
+        else:
+            self.view.run_command("expand_selection", { "to": "scope" }) 
+            selection_regions = self.view.sel()
+            self.process_regions(selection_regions)
+
+    def process_regions(self, selection_regions):
+        # For each selection
+        for region in selection_regions:
+            self.selected_text = self.view.substr(region)
+
+            if re.match('^["\'].+["\']$', self.selected_text):
+                self.selected_text = self.selected_text[1:-1]
+
+            if self.helper.find_files_according_to(self.selected_text):
+                # Prompt an input to place the translation foreach language
+                self.process()
+
+    def process(self):
+        self.list = []
+        while self.locales_path.process():
+            self.list.append(self.locales_path.yaml())
+
         self.show_quick_panel(self.list, self.open_file, self.preview_file)
 
     def preview_file(self, index):
