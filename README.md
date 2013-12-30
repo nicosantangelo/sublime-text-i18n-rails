@@ -27,12 +27,6 @@ The package supports relative and absolute routes, for example
 **Note:** If the package doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`.
 **Note2:** The package requires the root key (`es:`, `en:`, etc.) to be present to work.
 
-#### Select keys
-To select a key you can:
-
-1. Select the text (with or without quotes), for example, select `this.key` from `<%= t 'this.key' %>`.
-2. Place the cursor inside the quotes and [run][1] "I18n Rails: Add key".
-
 ### Checking keys
 If you want to check which keys in the file are present in the `*.yml` files, you can open up a Rails view and [run][1] "I18n Rails: Toggle key highlighting", resulting in something like this:
 
@@ -45,17 +39,29 @@ Each translation is looked up in the relative or absolute path (the same logic a
   * `.full` is correctly added. Uses the "comment" scope for the color.
 
 
+### Go to YAML file
+If you [run][1] "I18n Rails: Go to YAML file" [selecting][4] a key, you will be prompted with the files where the key might be defined, so you can access them quickly (as a tip, you can go back to the file you were editing with the sublime command _jump_back_, "alt+-" by default).
+The implementation is kind of rough right now, I will try to improve it overtime.
+
+### Select keys
+To select a key you can:
+
+1. Select the text (with or without quotes), for example, select `this.key` from `<%= t 'this.key' %>`.
+2. Place the cursor inside the quotes and [run][1] "I18n Rails: Add key".
+
 ## Shortcut Keys
 
 **Windows and Linux:**
 
  * Add:   `ctrl+alt+i` 
  * Toggle: `ctrl+alt+u`
+ * Go to file: `ctrl+alt+f`
 
 **OSX**
 
  * Add:   `super+alt+i` 
  * Toggle: `super+alt+u` 
+ * Go to file: `super+alt+f` 
 
 ## Settings
 
@@ -79,7 +85,7 @@ This package is available in [Package Control][2] or you can clone the repo into
 
 ## Roadmap
 
- * Command to "Go to yml file".
+ * ~~Command to "Go to yml file".~~
  * Support custom color scopes.
  * ~~Allow path filtering.~~
 
