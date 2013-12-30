@@ -54,6 +54,7 @@ class I18nRailsToggleCommand(BaseCommand):
         for region_name in self.regions.keys():
             self.view.erase_regions(region_name)
 
+
 class I18nRailsCommand(BaseCommand):
     def work(self):
         # Object to read and parse a yaml file
@@ -63,9 +64,9 @@ class I18nRailsCommand(BaseCommand):
 
     def store_selected_text(self, selected_text):
         self.selected_text = selected_text
-        self.process()
+        self.write_and_show_input()
 
-    def process(self, user_text = None):
+    def write_and_show_input(self, user_text = None):
         # Write the files keeping in mind the presence (or lack of) a dot to place the keys in the yml
         if user_text:
             self.write_text(user_text)
@@ -73,7 +74,7 @@ class I18nRailsCommand(BaseCommand):
         locale = self.locales_path.process()
         if locale:
             existing_text = self.existing_text_from_yaml()
-            self.show_input_panel(locale, existing_text, self.process, None, self.process)
+            self.show_input_panel(locale, existing_text, self.write_and_show_input, None, self.write_and_show_input)
 
     def existing_text_from_yaml(self):
         return self.yaml.text_from(self.selected_text)
