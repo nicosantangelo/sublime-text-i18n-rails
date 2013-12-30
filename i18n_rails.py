@@ -85,11 +85,8 @@ class I18nRailsCommand(BaseCommand):
 
 class I18nRailsGoToFileCommand(BaseCommand):
     def work(self):
-        self.for_each_selected_text(self.process)
+        self.for_each_selected_text(self.show_yml_files_in_quick_panel)
 
-    def process(self, selected_text):
-        self.files = []
-        while self.locales_path.process():
-            self.files.append(self.locales_path.yaml())
-
+    def show_yml_files_in_quick_panel(self, selected_text):
+        self.files = self.locales_path.every_yaml_file()
         self.show_quick_panel(self.files, self.open_file, self.preview_file)

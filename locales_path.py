@@ -18,15 +18,14 @@ class LocalesPath():
     def add(self, rejected = []):
         self.locales.add(self.path.file_names(".yml", rejected))
 
+    def every_yaml_file(self):
+        return [(self.path.i18n + file_name) for file_name in self.locales.names]
+
     def process(self):
         return self.locales.process()
 
     def yaml(self):
         return self.path.i18n + self.locales.current_locale
-
-    def file_name(self):
-        file_name = Path.remove_extension(self.path.file_name())
-        return file_name[1:] if file_name.startswith("_") else file_name
 
     def locale_name(self):
         return Path.remove_extension(self.locales.current_locale)
@@ -35,7 +34,11 @@ class LocalesPath():
         return len(self.locales.names)
 
     def splitted_keys(self):
-        return self.path_after_views().split("/") + [self.file_name()]
+        return self.path_after_views().split("/") + [self.rails_view_file_name()]
 
     def path_after_views(self):
         return self.path.after_views()
+
+    def rails_view_file_name(self):
+        file_name = Path.remove_extension(self.path.file_name())
+        return file_name[1:] if file_name.startswith("_") else file_name
