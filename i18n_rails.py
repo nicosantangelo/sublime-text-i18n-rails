@@ -2,25 +2,6 @@ import re
 from .base_command import BaseCommand
 from .yaml import Yaml
 
-class I18nRailsGoToFileCommand(BaseCommand):
-    def work(self):
-        for region in self.get_selection_regions():
-            self.selected_text = self.view.substr(region)
-
-            if re.match('^["\'].+["\']$', self.selected_text):
-                self.selected_text = self.selected_text[1:-1]
-
-            if self.add_yml_file_paths_by(self.selected_text):
-                # Prompt an input to place the translation foreach language
-                self.process()
-
-    def process(self):
-        self.files = []
-        while self.locales_path.process():
-            self.files.append(self.locales_path.yaml())
-
-        self.show_quick_panel(self.files, self.open_file, self.preview_file)
-
 class I18nRailsToggleCommand(BaseCommand):
     def work(self):
         global i18n_rails_keys_enabled
@@ -78,15 +59,11 @@ class I18nRailsCommand(BaseCommand):
         # Object to read and parse a yaml file
         self.yaml = Yaml(self.locales_path)
 
-        for region in self.get_selection_regions():
-            self.selected_text = self.view.substr(region)
+        self.for_each_selected_text(self.store_selected_text)
 
-            if re.match('^["\'].+["\']$', self.selected_text):
-                self.selected_text = self.selected_text[1:-1]
-
-            if self.add_yml_file_paths_by(self.selected_text):
-                # Prompt an input to place the translation foreach language
-                self.process()
+    def store_selected_text(self, selected_text):
+        self.selected_text = selected_text
+        self.process()
 
     def process(self, user_text = None):
         # Write the files keeping in mind the presence (or lack of) a dot to place the keys in the yml
@@ -104,3 +81,15 @@ class I18nRailsCommand(BaseCommand):
     def write_text(self, text):
         self.yaml.write_text(text)
         self.display_message("{0}: {1} created!".format(self.selected_text, text))
+
+
+class I18nRailsGoToFileCommand(BaseCommand):
+    def work(self):
+        self.for_each_selected_text(self.process)
+
+    def process(self, selected_text):
+        self.files = []
+        while self.locales_path.process():
+            self.files.append(self.locales_path.yaml())
+
+        self.show_quick_panel(self.files, self.open_file, self.preview_file)

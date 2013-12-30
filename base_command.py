@@ -20,6 +20,16 @@ class BaseCommand(sublime_plugin.TextCommand):
     def in_rails_view(self):
         return bool(re.search(r'\.(erb|haml)?$', self.view.file_name()))
 
+    def for_each_selected_text(self, func):
+        for region in self.get_selection_regions():
+            selected_text = self.view.substr(region)
+
+            if re.match('^["\'].+["\']$', selected_text):
+                selected_text = selected_text[1:-1]
+
+            if self.add_yml_file_paths_by(selected_text):
+                func(selected_text)
+
     def get_selection_regions(self):
         selection_regions = self.view.sel()
 
