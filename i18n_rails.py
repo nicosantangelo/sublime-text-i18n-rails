@@ -4,24 +4,13 @@ from .yaml import Yaml
 
 class I18nRailsGoToFileCommand(BaseCommand):
     def work(self):
-        selection_regions = self.view.sel()
-
-        if not selection_regions[0].empty():
-            self.process_regions(selection_regions)
-        else:
-            self.view.run_command("expand_selection", { "to": "scope" }) 
-            selection_regions = self.view.sel()
-            self.process_regions(selection_regions)
-
-    def process_regions(self, selection_regions):
-        # For each selection
-        for region in selection_regions:
+        for region in self.get_selection_regions():
             self.selected_text = self.view.substr(region)
 
             if re.match('^["\'].+["\']$', self.selected_text):
                 self.selected_text = self.selected_text[1:-1]
 
-            if self.find_files_according_to(self.selected_text):
+            if self.add_yml_file_paths_by(self.selected_text):
                 # Prompt an input to place the translation foreach language
                 self.process()
 
@@ -57,7 +46,7 @@ class I18nRailsToggleCommand(BaseCommand):
         for method_call_region in method_call_regions:
             key = self.find_key_in_method_call(method_call_region)
             
-            if self.find_files_according_to(key):
+            if self.add_yml_file_paths_by(key):
                 self.add_to_regions(method_call_region, key)
 
         self.paint_highlighted_keys()
@@ -89,26 +78,13 @@ class I18nRailsCommand(BaseCommand):
         # Object to read and parse a yaml file
         self.yaml = Yaml(self.locales_path)
 
-        # Take highlighted text
-        selection_regions = self.view.sel()
-
-        # Check if there's a selection
-        if not selection_regions[0].empty():
-            self.process_regions(selection_regions)
-        else:
-            self.view.run_command("expand_selection", { "to": "scope" }) 
-            selection_regions = self.view.sel()
-            self.process_regions(selection_regions)
-
-    def process_regions(self, selection_regions):
-        # For each selection
-        for region in selection_regions:
+        for region in self.get_selection_regions():
             self.selected_text = self.view.substr(region)
 
             if re.match('^["\'].+["\']$', self.selected_text):
                 self.selected_text = self.selected_text[1:-1]
 
-            if self.find_files_according_to(self.selected_text):
+            if self.add_yml_file_paths_by(self.selected_text):
                 # Prompt an input to place the translation foreach language
                 self.process()
 

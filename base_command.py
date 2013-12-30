@@ -20,7 +20,17 @@ class BaseCommand(sublime_plugin.TextCommand):
     def in_rails_view(self):
         return bool(re.search(r'\.(erb|haml)?$', self.view.file_name()))
 
-    def find_files_according_to(self, key):
+    def get_selection_regions(self):
+        selection_regions = self.view.sel()
+
+        # If the user didn't select anything create a selection expanding to the nearest scope (hopefully quotes)
+        if selection_regions[0].empty():
+            self.view.run_command("expand_selection", { "to": "scope" }) 
+            selection_regions = self.view.sel()
+
+        return selection_regions
+
+    def add_yml_file_paths_by(self, key):
         # If the text starts with a dot, parse the text and search in ../config/locales/views/folder_name/*.yml, else in ../config/locales/
         self.locales_path.reset()
 
