@@ -52,7 +52,7 @@ class I18nRailsToggleCommand(BaseCommand):
 
     def clear_highlighted_keys(self):
         for region_name in self.regions.keys():
-            self.view.erase_regions(region_name)
+            self.erase_regions(region_name)
 
 
 class I18nRailsCommand(BaseCommand):

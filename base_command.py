@@ -74,3 +74,7 @@ class BaseCommand(sublime_plugin.TextCommand):
     # Regions
     def add_regions(self, region_name, start, end):
         self.view.add_regions(region_name, start, end, "", sublime.DRAW_NO_FILL)
+
+    def erase_regions(self, region_name):
+        self.view.erase_regions(region_name)
+ 
