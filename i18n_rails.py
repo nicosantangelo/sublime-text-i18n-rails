@@ -1,18 +1,9 @@
-import sublime, sublime_plugin, re
-from .locales_path import LocalesPath
+import re
+from .base_command import BaseCommand
 from .yaml import Yaml
 
-class I18nRailsGoToFileCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
-        # Common operations
-        self.helper = CommandHelper(self)
-
-        if not self.helper.in_view():
-            helper.display_message("This package only works on rails views!")
-            return 
-
-        self.locales_path = LocalesPath(self.view.file_name())
-
+class I18nRailsGoToFileCommand(BaseCommand):
+    def work(self):
         selection_regions = self.view.sel()
 
         if not selection_regions[0].empty():
@@ -30,36 +21,20 @@ class I18nRailsGoToFileCommand(sublime_plugin.TextCommand):
             if re.match('^["\'].+["\']$', self.selected_text):
                 self.selected_text = self.selected_text[1:-1]
 
-            if self.helper.find_files_according_to(self.selected_text):
+            if self.find_files_according_to(self.selected_text):
                 # Prompt an input to place the translation foreach language
                 self.process()
 
     def process(self):
-        self.list = []
+        self.files = []
         while self.locales_path.process():
-            self.list.append(self.locales_path.yaml())
+            self.files.append(self.locales_path.yaml())
 
-        self.show_quick_panel(self.list, self.open_file, self.preview_file)
+        self.show_quick_panel(self.files, self.open_file, self.preview_file)
 
-    def preview_file(self, index):
-        self.view.window().open_file(self.list[index], sublime.TRANSIENT)
-
-    def open_file(self, index):
-        self.view.window().open_file(self.list[index])
-
-    def show_quick_panel(self, items, on_done, on_highlighted, selected_index = -1):
-        self.view.window().show_quick_panel(items, on_done, sublime.MONOSPACE_FONT, selected_index, on_highlighted)
-
-class I18nRailsToggleCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+class I18nRailsToggleCommand(BaseCommand):
+    def work(self):
         global i18n_rails_keys_enabled
-
-        # Common operations
-        self.helper = CommandHelper(self)
-
-        if not self.helper.in_view():
-            helper.display_message("This package only works on rails views!")
-            return 
 
         self.regions = { 'valid': ([], "comment"), 'partial': ([], "string"), 'invalid': ([], "invalid") }
 
@@ -75,7 +50,6 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
         i18n_rails_keys_enabled = not i18n_rails_keys_enabled
 
     def highlight_keys(self):
-        self.locales_path = LocalesPath(self.view.file_name())
         self.yaml = Yaml(self.locales_path)
 
         method_call_regions = self.view.find_all('\s*(?:I18n\.)?t(?:\(|\s+)["\'](\.?[\w\.]+)["\']\)?\s*')
@@ -83,7 +57,7 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
         for method_call_region in method_call_regions:
             key = self.find_key_in_method_call(method_call_region)
             
-            if self.helper.find_files_according_to(key):
+            if self.find_files_according_to(key):
                 self.add_to_regions(method_call_region, key)
 
         self.paint_highlighted_keys()
@@ -104,24 +78,14 @@ class I18nRailsToggleCommand(sublime_plugin.TextCommand):
 
     def paint_highlighted_keys(self):
         for region_name, regions_tuple in self.regions.items():
-            self.view.add_regions(region_name, regions_tuple[0], regions_tuple[1], "", sublime.DRAW_NO_FILL)
+            self.add_regions(region_name, regions_tuple[0], regions_tuple[1])
 
     def clear_highlighted_keys(self):
         for region_name in self.regions.keys():
             self.view.erase_regions(region_name)
 
-class I18nRailsCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
-        # Common operations
-        self.helper = CommandHelper(self)
-
-        if not self.helper.in_view():
-            helper.display_message("This package only works on rails views!")
-            return 
-
-        # Facade between path and locales
-        self.locales_path = LocalesPath(self.view.file_name())
-
+class I18nRailsCommand(BaseCommand):
+    def work(self):
         # Object to read and parse a yaml file
         self.yaml = Yaml(self.locales_path)
 
@@ -144,7 +108,7 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
             if re.match('^["\'].+["\']$', self.selected_text):
                 self.selected_text = self.selected_text[1:-1]
 
-            if self.helper.find_files_according_to(self.selected_text):
+            if self.find_files_according_to(self.selected_text):
                 # Prompt an input to place the translation foreach language
                 self.process()
 
@@ -163,34 +127,4 @@ class I18nRailsCommand(sublime_plugin.TextCommand):
 
     def write_text(self, text):
         self.yaml.write_text(text)
-        self.helper.display_message("{0}: {1} created!".format(self.selected_text, text))
-
-    def show_input_panel(self, caption, initial_text = "", on_done = None, on_change = None, on_cancel = None):
-        self.view.window().show_input_panel(caption, initial_text, on_done, on_change, on_cancel)
-
-class CommandHelper():
-    def __init__(self, command):
-        self.command = command
-        # Get the rejected file names from the settings
-        settings = sublime.load_settings("I18nRails.sublime-settings")
-        self.rejected_files = settings.get("rejected_files", [])
-
-    def in_view(self):
-        return bool(re.search(r'\.(erb|haml)?$', self.command.view.file_name()))
-
-    def find_files_according_to(self, key):
-        # If the text starts with a dot, parse the text and search in ../config/locales/views/folder_name/*.yml, else in ../config/locales/
-        self.command.locales_path.reset()
-
-        if key.startswith("."):
-            self.command.locales_path.move_to_translation_folder()
-
-        try:
-            # Store every language (en, es, etc.) with the extension, except for the rejected files
-            self.command.locales_path.add(self.rejected_files)
-            return True
-        except FileNotFoundError:
-            self.command.display_message(self.command.locales_path.yaml() + " doesn't exist. Are you in a view?")
-        
-    def display_message(self, text):
-        sublime.active_window().active_view().set_status("i18_rails", text)
+        self.display_message("{0}: {1} created!".format(self.selected_text, text))
