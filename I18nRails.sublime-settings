@@ -1,3 +1,9 @@
 {
-        "rejected_files": []
+    // Skip this file names
+    "rejected_files": [],
+
+    // Scope names used to highlight the keys
+    "valid_color_scope": "comment",
+    "partial_color_scope": "string",
+    "invalid_color_scope": "invalid"
 }

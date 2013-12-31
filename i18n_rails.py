@@ -2,15 +2,16 @@ import re
 from .base_command import BaseCommand
 from .yaml import Yaml
 
+# 1. Toggle highlight
 class I18nRailsToggleCommand(BaseCommand):
     def work(self):
         global i18n_rails_keys_enabled
 
-        self.regions = { 'valid': ([], "comment"), 'partial': ([], "string"), 'invalid': ([], "invalid") }
-
         # Default value
         if not 'i18n_rails_keys_enabled' in globals():
             i18n_rails_keys_enabled = True 
+        
+        self.setup_regions()
 
         if i18n_rails_keys_enabled:
             self.highlight_keys()
@@ -18,6 +19,13 @@ class I18nRailsToggleCommand(BaseCommand):
            self.clear_highlighted_keys()
 
         i18n_rails_keys_enabled = not i18n_rails_keys_enabled
+
+    def setup_regions(self):
+        self.regions = {
+            'valid'  : ([], self.settings.get("valid_color_scope",   "comment")),
+            'partial': ([], self.settings.get("partial_color_scope", "string")),
+            'invalid': ([], self.settings.get("invalid_color_scope", "invalid"))
+        }
 
     def highlight_keys(self):
         self.yaml = Yaml(self.locales_path)
@@ -54,7 +62,7 @@ class I18nRailsToggleCommand(BaseCommand):
         for region_name in self.regions.keys():
             self.erase_regions(region_name)
 
-
+# 2. Add keys
 class I18nRailsCommand(BaseCommand):
     def work(self):
         # Object to read and parse a yaml file
@@ -83,7 +91,7 @@ class I18nRailsCommand(BaseCommand):
         self.yaml.write_text(text)
         self.display_message("{0}: {1} created!".format(self.selected_text, text))
 
-
+# 3. Go to file
 class I18nRailsGoToFileCommand(BaseCommand):
     def work(self):
         self.for_each_selected_text(self.show_yml_files_in_quick_panel)
