@@ -45,7 +45,8 @@ If you want to help, any ideas are welcome or just fork away!
 
 
 ### Go to YAML file
-If you [run][1] "I18n Rails: Go to YAML file" [selecting][4] a key, you will be prompted with the files where the key might be defined, so you can access them quickly (as a tip, you can go back to the file you were editing with the sublime command _jump_back_, "alt+-" by default).
+If you [run][1] "I18n Rails: Go to YAML file" [selecting][4] a key, you will be prompted with the files where the key might be defined, so you can access them quickly (as a tip, you can go back to the file you were editing with the sublime command *jump_back*, *[alt+-]* by default).
+
 The implementation is kind of rough right now, I will try to improve it overtime.
 
 ### Select keys
