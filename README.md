@@ -2,10 +2,20 @@
 
 This package is aimed to help you create Internationalization keys.
 
-## Usage
+## Available commands
 
-### Adding keys
+### Checking keys
+If you want to check which keys in the file are present in the `*.yml` files, you can open up a Rails view and [run][1] "I18n Rails: Toggle key highlighting", resulting in something like this:
 
+![](https://raw.github.com/NicoSantangelo/sublime-text-i18n-rails/master/demo.png)
+
+Each translation is looked up in the relative or absolute path (the same logic applied for adding the values). So, in the example:
+  
+  * `.missing_key` wasn't found on any `*.yml` file. Uses the "invalid" scope for the color.
+  * `.partial` was found in some locales but no all (for example, only defined in en.yml but missing in es.yml). Uses the "string" scope for the color.
+  * `.full` is correctly added. Uses the "comment" scope for the color.
+
+### Adding keys ([readme][5])
 To add a key, go to a Rails view, [select][4] the key you want to add a value to and [run][1] the command "I18n Rails: Add key".
 
 The package will display a prompt asking for the value in every language available, If the key value is found, the prompt will show it (so it can be edited easily). If you don't want to edit a locale, just skip it by pressing Esc.
@@ -27,16 +37,11 @@ The package supports relative and absolute routes, for example
 **Note:** If the package doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`.
 **Note2:** The package requires the root key (`es:`, `en:`, etc.) to be present to work.
 
-### Checking keys
-If you want to check which keys in the file are present in the `*.yml` files, you can open up a Rails view and [run][1] "I18n Rails: Toggle key highlighting", resulting in something like this:
+##### Readme
+Because of the way [PyYAML][6], the python yaml parser, dumps the loaded yaml files I can't ensure the file format after a value it's added using this command. I couldn't find a work around this, so I made an [issue][7] wich also contains an (unanswered) stackoverflow question.
 
-![](https://raw.github.com/NicoSantangelo/sublime-text-i18n-rails/master/demo.png)
-
-Each translation is looked up in the relative or absolute path (the same logic applied for adding the values). So, in the example:
-  
-  * `.missing_key` wasn't found on any `*.yml` file. Uses the "invalid" scope for the color.
-  * `.partial` was found in some locales but no all (for example, only defined in en.yml but missing in es.yml). Uses the "string" scope for the color.
-  * `.full` is correctly added. Uses the "comment" scope for the color.
+I'm thinking of some way to improve this, but right now I'll leave the issue open and add a *"(experimental)"* "tag" to the command name.
+If you want to help, any ideas are welcome or just fork away! 
 
 
 ### Go to YAML file
@@ -96,3 +101,6 @@ This package is available in [Package Control][2] or you can clone the repo into
   [2]: https://sublime.wbond.net/
   [3]: https://raw.github.com/NicoSantangelo/sublime-text-i18n-rails/master/LICENSE
   [4]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#select-keys
+  [5]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#readme
+  [6]: http://pyyaml.org/
+  [7]: https://github.com/NicoSantangelo/sublime-text-i18n-rails/issues/6

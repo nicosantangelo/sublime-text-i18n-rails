@@ -1,6 +1,6 @@
 [{
   "id": "i18nrails",
-  "caption": "I18n Rails: Add key",
+  "caption": "I18n Rails: Add key (experimental)",
   "command": "i18n_rails"
 },
 {
