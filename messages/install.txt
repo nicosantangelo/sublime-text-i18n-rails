@@ -1,5 +1,6 @@
 QuickStart (sorry for the interruption)
-=====================
+=======================================
+
 1) To use the package, go to a Rails view select the key where you want to add a value to and run the command "I18n Rails: Add key"
 
 For example, select '.hello' or 'some.other.key.bye' in your view and run the plugin:
@@ -18,7 +19,10 @@ Each translation is looked up in the relative or absolute path (the same logic a
   * partial: was found in some locales but no all (for example, only defined in en.yml but missing in es.yml).
   * full: is correctly added.
 
+  
+3) Lastly you can run "I18n Rails: Go to YAML file" when you are selecting a key and the package will display a quick panel with the yml files where the key is defined or where it could be.
 
-Repo
---------------------------
+
+Check the repo for the complete docs
+-------------------------------------
     https://github.com/NicoSantangelo/sublime-text-i18n-rails
