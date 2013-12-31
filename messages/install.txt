@@ -1,17 +1,7 @@
 QuickStart (sorry for the interruption)
 =======================================
 
-1) To use the package, go to a Rails view select the key where you want to add a value to and run the command "I18n Rails: Add key"
-
-For example, select '.hello' or 'some.other.key.bye' in your view and run the plugin:
-
-    # index.html.erb
-    <%= t('.hello') %> 
-    <!-- (...) -->
-    <%= t('some.other.key.bye') %>
-
-
-2) Also If you want to check which keys in the file are present in the `*.yml` files, you can open up a Rails view and run the command "I18n Rails: Toggle key highlighting"
+1) Also If you want to check which keys in the file are present in the `*.yml` files, you can open up a Rails view and run the command "I18n Rails: Toggle key highlighting"
 
 Each translation is looked up in the relative or absolute path (the same logic applied for adding the values) and colored by:
   
@@ -19,6 +9,14 @@ Each translation is looked up in the relative or absolute path (the same logic a
   * partial: was found in some locales but no all (for example, only defined in en.yml but missing in es.yml).
   * full: is correctly added.
 
+2) To use the package, go to a Rails view select the key where you want to add a value to and run the command "I18n Rails: Add key"
+
+For example, select '.hello' or 'some.other.key.bye' in your view and run the plugin:
+
+    # index.html.erb
+    <%= t('.hello') %> 
+    <!-- (...) -->
+    <%= t('some.other.key.bye') %>
   
 3) Lastly you can run "I18n Rails: Go to YAML file" when you are selecting a key and the package will display a quick panel with the yml files where the key is defined or where it could be.
 
