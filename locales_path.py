@@ -18,8 +18,11 @@ class LocalesPath():
     def add(self, rejected = []):
         self.locales.add(self.path.file_names(".yml", rejected))
 
-    def every_yaml_file(self):
-        return [(self.path.i18n + file_name) for file_name in self.locales.names]
+    def for_each_process(self, func):
+        locale = self.process()
+        while locale:
+            func(locale)
+            locale = self.process()
 
     def process(self):
         return self.locales.process()

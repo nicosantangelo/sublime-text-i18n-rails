@@ -66,10 +66,10 @@ class BaseCommand(sublime_plugin.TextCommand):
 
     # Files
     def preview_file(self, index):
-        self.view.window().open_file(self.files[index], sublime.TRANSIENT)
+        self.view.window().open_file(self.paths[index], sublime.TRANSIENT)
 
     def open_file(self, index):
-        self.view.window().open_file(self.files[index])
+        self.view.window().open_file(self.paths[index])
 
     # Regions
     def add_regions(self, region_name, start, end):
