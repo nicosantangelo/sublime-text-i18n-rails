@@ -44,9 +44,13 @@ I'm thinking of some way to improve this, but in the meantime if you want to hel
 
 
 ### 3. Go to YAML file
-If you [run][1] "I18n Rails: Go to YAML file" [selecting][4] a key, you will be prompted with the files where the key might be defined, so you can access them quickly (as a tip, you can go back to the file you were editing with the sublime command *jump_back*, *[alt+-]* by default).
+If you [run][1] "I18n Rails: Go to YAML file" [selecting][4] a key, you will be prompted with the files where the key might be defined, so you can access them quickly (as a tip, you can go back to the file you were editing with the sublime command *jump_back*, *["alt+-""]* by default).
 
-The implementation is kind of rough right now, I will try to improve it overtime.
+If the translation is found, the quick panel will show it after the locale:
+````
+en.yml: Translation  # with
+es.yml               # without
+````
 
 ## Selecting keys
 To select a key you can:
