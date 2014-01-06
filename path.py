@@ -10,8 +10,8 @@ class Path():
             dir_path = self.dirname()
             app_index = dir_path.index("/app") if "/app" in dir_path else dir_path.index("\\app")
         except ValueError:
-            raise "I18nRails: The 'app' folder wasn't found on your project!"
-
+            raise Exception("I18nRails: The 'app' folder wasn't found on your project!")
+            
         return os.path.abspath(os.path.join(self.dirname()[:app_index], "config", "locales")) + "/"
 
     def move_to_translation_folder(self, new_path = None):
