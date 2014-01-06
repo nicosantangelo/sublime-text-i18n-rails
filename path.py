@@ -6,7 +6,12 @@ class Path():
         self.i18n = self.default_path()
 
     def default_path(self):
-        app_index = self.dirname().index("/app")
+        try:
+            dir_path = self.dirname()
+            app_index = dir_path.index("/app") if "/app" in dir_path else dir_path.index("\\app")
+        except ValueError:
+            raise "I18nRails: The 'app' folder wasn't found on your project!"
+
         return os.path.abspath(os.path.join(self.dirname()[:app_index], "config", "locales")) + "/"
 
     def move_to_translation_folder(self, new_path = None):
@@ -30,7 +35,8 @@ class Path():
         return self
 
     def after_views(self):
-        return self.dirname().split("/views/")[1]
+        dir_path = self.dirname() 
+        return dir_path.split("/views/")[1] if "/views/" in dir_path else dir_path.split("\\views\\")[1]
 
     def dirname(self):
         return os.path.dirname(self.full)
