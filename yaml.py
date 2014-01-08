@@ -25,7 +25,7 @@ class Yaml():
 
         return self.dict
 
-    def text_from(self, selected_text):
+    def value_from(self, selected_text):
         self.read_file()
 
         self.move_to(selected_text)
@@ -51,10 +51,10 @@ class Yaml():
         yaml_file.write( pyyaml.dump(self.yaml_to_write, default_flow_style = False, allow_unicode = True, encoding = None) )
         yaml_file.truncate()
 
-    def text_count(self, key):
+    def value_count(self, key):
         count = 0
         while self.locales_path.process():
-            if self.text_from(key): 
+            if self.value_from(key): 
                 count += 1
 
         return count

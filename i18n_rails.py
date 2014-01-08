@@ -45,7 +45,7 @@ class I18nRailsToggleCommand(BaseCommand):
 
     def add_to_regions(self, region, key):
         locales_len = self.locales_path.locales_len()
-        translations_count = self.yaml.text_count(key)
+        translations_count = self.yaml.value_count(key)
 
         if translations_count == locales_len:
             self.regions['valid'][0].append(region)
@@ -81,15 +81,16 @@ class I18nRailsCommand(BaseCommand):
 
         locale = self.locales_path.process()
         if locale:
-            existing_text = self.existing_text_from_yaml()
-            self.show_input_panel(locale, existing_text, self.write_and_show_input, None, self.write_and_show_input)
-
-    def existing_text_from_yaml(self):
-        return self.yaml.text_from(self.selected_text)
+            existing_value = self.existing_value_from_yaml()
+            self.show_input_panel(locale, existing_value, self.write_and_show_input, None, self.write_and_show_input)
 
     def write_text(self, text):
         self.yaml.write_text(text)
         self.display_message("{0}: {1} created!".format(self.selected_text, text))
+
+    def key_parent_notice(self, parent):
+        keys = self.joined_keys(parent) if not parent is None else "no key right now"
+        return "The key is the parent of: %s." % keys
 
 # 3. Go to file
 class I18nRailsGoToFileCommand(BaseCommand):
@@ -109,10 +110,15 @@ class I18nRailsGoToFileCommand(BaseCommand):
         self.show_quick_panel(self.text_to_display, self.open_file, self.preview_file)
 
     def fill_paths_and_text(self, locale):
-        existing_text = self.yaml.text_from(self.selected_text)
-        if existing_text:
-            self.text_to_display.append( locale + ": " + existing_text )
+        existing_value = self.existing_value_from_yaml()
+
+        if existing_value:
+            self.text_to_display.append( locale + ": " + existing_value )
         else:
             self.text_to_display.append( locale )
             
         self.paths.append(self.locales_path.yaml())
+
+    def key_parent_notice(self, parent):
+        keys = self.joined_keys(parent) if not parent is None else "no key"
+        return "Parent of %s" % keys

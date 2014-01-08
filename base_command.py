@@ -54,6 +54,17 @@ class BaseCommand(sublime_plugin.TextCommand):
         except FileNotFoundError:
             self.display_message(self.locales_path.yaml() + " doesn't exist. Are you in a view?")
 
+    def existing_value_from_yaml(self):
+        existing_value = self.yaml.value_from(self.selected_text)
+        return existing_value if isinstance(existing_value, str) else self.key_parent_notice(existing_value)
+
+    def joined_keys(self, dict):
+        return ', '.join(list(parent.keys()))
+
+    # Override
+    def key_parent_notice(self, parent):
+        return ""
+
     # Panels and message
     def display_message(self, text):
         sublime.active_window().active_view().set_status("i18_rails", text)
