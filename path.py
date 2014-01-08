@@ -8,7 +8,7 @@ class Path():
     def default_path(self):
         try:
             dir_path = self.dirname()
-            app_index = dir_path.index("/app") if "/app" in dir_path else dir_path.index("\\app")
+            app_index = dir_path.index("/app/") if "/app/" in dir_path else dir_path.index("\\app\\")
         except ValueError:
             raise Exception("I18nRails: The 'app' folder wasn't found on your project!")
             
