@@ -90,7 +90,7 @@ class I18nRailsCommand(BaseCommand):
 
     def key_parent_notice(self, parent):
         keys = self.joined_keys(parent) if not parent is None else "no key right now"
-        return "The key is the parent of: %s." % keys
+        return "The key is the parent of: {keys}".format(keys = keys)
 
 # 3. Go to file
 class I18nRailsGoToFileCommand(BaseCommand):
@@ -121,4 +121,4 @@ class I18nRailsGoToFileCommand(BaseCommand):
 
     def key_parent_notice(self, parent):
         keys = self.joined_keys(parent) if not parent is None else "no key"
-        return "Parent of %s" % keys
+        return "Parent of {keys}".format(keys = keys)

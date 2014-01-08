@@ -56,7 +56,7 @@ class BaseCommand(sublime_plugin.TextCommand):
 
     def existing_value_from_yaml(self):
         existing_value = self.yaml.value_from(self.selected_text)
-        return existing_value if isinstance(existing_value, str) else self.key_parent_notice(existing_value)
+        return existing_value if isinstance(existing_value, basestring) else self.key_parent_notice(existing_value)
 
     def joined_keys(self, parent):
         return ', '.join(list(parent.keys()))
