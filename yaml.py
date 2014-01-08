@@ -1,4 +1,4 @@
-from . import pyyaml
+import pyyaml as pyyaml
 
 class Yaml():
     def __init__(self, locales_path):

@@ -1,6 +1,6 @@
 import re
-from .base_command import BaseCommand
-from .yaml import Yaml
+from base_command import BaseCommand
+from yaml import Yaml
 
 # 1. Toggle highlight
 class I18nRailsToggleCommand(BaseCommand):

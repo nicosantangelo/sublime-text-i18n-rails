@@ -1,5 +1,5 @@
 import sublime, sublime_plugin, re
-from .locales_path import LocalesPath
+from locales_path import LocalesPath
 
 class BaseCommand(sublime_plugin.TextCommand):
     def run(self, edit):
