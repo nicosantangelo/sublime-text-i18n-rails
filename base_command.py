@@ -70,7 +70,7 @@ class BaseCommand(sublime_plugin.TextCommand):
         sublime.active_window().active_view().set_status("i18_rails", text)
 
     def show_quick_panel(self, items, on_done, on_highlighted, selected_index = -1):
-        self.view.window().show_quick_panel(items, on_done, sublime.MONOSPACE_FONT, selected_index, on_highlighted)
+        self.view.window().show_quick_panel(items, on_done, sublime.MONOSPACE_FONT)
 
     def show_input_panel(self, caption, initial_text = "", on_done = None, on_change = None, on_cancel = None):
         self.view.window().show_input_panel(caption, initial_text, on_done, on_change, on_cancel)
@@ -84,7 +84,7 @@ class BaseCommand(sublime_plugin.TextCommand):
 
     # Regions
     def add_regions(self, region_name, start, end):
-        self.view.add_regions(region_name, start, end, "", sublime.DRAW_NO_FILL)
+        self.view.add_regions(region_name, start, end, "", sublime.DRAW_OUTLINED)
 
     def erase_regions(self, region_name):
         self.view.erase_regions(region_name)
