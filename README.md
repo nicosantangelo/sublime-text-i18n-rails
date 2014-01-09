@@ -112,13 +112,13 @@ You may have to restart sublime to see the changes.
 
  * Add:   `ctrl+alt+i` 
  * Toggle: `ctrl+alt+u`
- * Go to file: `ctrl+alt+f`
+ * Go to file: `ctrl+alt+y`
 
 **OSX**
 
  * Add:   `super+alt+i` 
  * Toggle: `super+alt+u` 
- * Go to file: `super+alt+f` 
+ * Go to file: `super+alt+y` 
 
 ## Installation
 

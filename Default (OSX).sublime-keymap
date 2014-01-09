@@ -1,5 +1,5 @@
 [
     { "keys": ["super+alt+i"], "command": "i18n_rails"},
     { "keys": ["super+alt+u"], "command": "i18n_rails_toggle" },
-    { "keys": ["super+alt+f"], "command": "i18n_rails_go_to_file" }
+    { "keys": ["super+alt+y"], "command": "i18n_rails_go_to_file" }
 ]
