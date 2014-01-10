@@ -89,8 +89,8 @@ class I18nRailsCommand(BaseCommand):
         self.display_message("{0}: {1} created!".format(self.selected_text, text))
 
     def key_parent_notice(self, parent):
-        keys = self.joined_keys(parent) if not parent is None else "no key right now"
-        return "The key is the parent of: %s." % keys
+        return "The key is the parent of: %s." % self.joined_keys(parent) if not parent is None else ""
+            
 
 # 3. Go to file
 class I18nRailsGoToFileCommand(BaseCommand):
@@ -120,5 +120,4 @@ class I18nRailsGoToFileCommand(BaseCommand):
         self.paths.append(self.locales_path.yaml())
 
     def key_parent_notice(self, parent):
-        keys = self.joined_keys(parent) if not parent is None else "no key"
-        return "Parent of %s" % keys
+        return "Parent of %s" % self.joined_keys(parent) if not parent is None else ""
