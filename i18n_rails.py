@@ -89,7 +89,7 @@ class I18nRailsCommand(BaseCommand):
         self.display_message("{0} created!".format(self.selected_text))
 
     def key_parent_notice(self, parent):
-        return "The key is the parent of: {keys}".format(keys = self.joined_keys(parent)) if not parent is None else ""
+        return "The key is the parent of: {keys}".format(self.joined_keys(parent)) if not parent is None else ""
 
 # 3. Go to file
 class I18nRailsGoToFileCommand(BaseCommand):
@@ -119,4 +119,4 @@ class I18nRailsGoToFileCommand(BaseCommand):
         self.paths.append(self.locales_path.yaml())
 
     def key_parent_notice(self, parent):
-        return "Parent of {keys}".format(keys = self.joined_keys(parent)) if not parent is None else ""
+        return "Parent of {keys}".format(self.joined_keys(parent)) if not parent is None else ""

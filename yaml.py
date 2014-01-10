@@ -31,7 +31,12 @@ class Yaml():
 
         self.move_to(selected_text)
 
-        return self.dict[self.last_key] if self.last_key in self.dict else ""
+        if self.intermediate_value is None:
+            value = self.dict[self.last_key] if self.last_key in self.dict else ""
+        else:
+            value = self.intermediate_value
+
+        return value
 
     def write_text(self, text):
         with codecs.open(self.locales_path.yaml(), 'w', "utf-8") as yaml_file:
@@ -62,14 +67,24 @@ class Yaml():
 
     def traverse(self, keys):
         for key in keys:
-            if not key in self.dict or self.dict[key] is None:
+            if self.should_set_intermediate_value_with(key):
+                self.intermediate_value = "The key {0} is already defined with {1}".format(key, self.dict[key])
+
+            if self.should_initialize_with(key):
                 self.dict[key] = {}
 
             self.dict = self.dict[key]
 
         return self.dict
 
+    def should_set_intermediate_value_with(self, key):
+        return self.intermediate_value is None and key in self.dict and isinstance(self.dict[key], basestring)
+
+    def should_initialize_with(self, key):
+        return not key in self.dict or self.dict[key] is None or isinstance(self.dict[key], basestring)
+
     def setup(self):
         self.dict = {}
         self.yaml_to_write = {}
         self.last_key = ''
+        self.intermediate_value = None
