@@ -17,11 +17,12 @@ class Yaml():
             keys += self.locales_path.splitted_keys()
 
             # Remove the dot    
-            self.last_key = selected_text[1:]
-        else:
-            #[ key1, key2, ...]
-            keys += selected_text.split(".")
-            self.last_key = keys.pop()
+            selected_text = selected_text[1:]
+            
+        #[ key1, key2, ...]
+        keys += selected_text.split(".")
+        
+        self.last_key = keys.pop()
 
         # Move on the yaml file
         self.traverse(keys)
