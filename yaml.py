@@ -71,7 +71,7 @@ class Yaml():
     def traverse(self, keys):
         for key in keys:
             if self.should_set_intermediate_value_with(key):
-                self.intermediate_value = "The key {0} is already defined with {1}".format(key, self.dict[key])
+                self.intermediate_value = "The key {0} is already defined".format(key)
 
             if self.should_initialize_with(key):
                 self.dict[key] = {}
