@@ -35,7 +35,7 @@ class Yaml():
 
     def write_text(self, text):
         with codecs.open(self.locales_path.yaml(), 'w', "utf-8") as yaml_file:
-            self.dict[self.last_key] = text
+            self.dict[self.last_key] = text.encode('utf-8')
 
             self.write_file(yaml_file)
 
@@ -49,7 +49,7 @@ class Yaml():
 
     def write_file(self, yaml_file):
         yaml_file.seek(0)
-        yaml_file.write( pyyaml.dump(self.yaml_to_write, default_flow_style = False, allow_unicode = True, encoding = None) )
+        yaml_file.write( pyyaml.safe_dump(self.yaml_to_write, default_flow_style = False, allow_unicode = True, encoding = None) )
         yaml_file.truncate()
 
     def value_count(self, key):

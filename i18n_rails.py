@@ -86,7 +86,7 @@ class I18nRailsCommand(BaseCommand):
 
     def write_text(self, text):
         self.yaml.write_text(text)
-        self.display_message("{0}: {1} created!".format(self.selected_text, text))
+        self.display_message("{0} created!".format(self.selected_text))
 
     def key_parent_notice(self, parent):
         keys = self.joined_keys(parent) if not parent is None else "no key right now"
