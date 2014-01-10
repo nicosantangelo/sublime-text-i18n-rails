@@ -9,7 +9,7 @@ class Yaml():
     def move_to(self, selected_text):
         # Reset the intermediate value
         self.intermediate_value = None
-        
+
         # Find the full paths file name key on the dict inside 
         keys = [ self.locales_path.locale_name() ] # root: es|en|...
 
@@ -18,11 +18,12 @@ class Yaml():
             keys += self.locales_path.splitted_keys()
 
             # Remove the dot    
-            self.last_key = selected_text[1:]
-        else:
-            #[ key1, key2, ...]
-            keys += selected_text.split(".")
-            self.last_key = keys.pop()
+            selected_text = selected_text[1:]
+            
+        #[ key1, key2, ...]
+        keys += selected_text.split(".")
+        
+        self.last_key = keys.pop()
 
         # Move on the yaml file
         self.traverse(keys)
