@@ -6,6 +6,9 @@ class Yaml():
         self.setup()
 
     def move_to(self, selected_text):
+        # Reset the intermediate value
+        self.intermediate_value = None
+
         # Find the full paths file name key on the dict inside 
         keys = [ self.locales_path.locale_name() ] # root: es|en|...
 
