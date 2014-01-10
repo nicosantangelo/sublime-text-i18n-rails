@@ -86,7 +86,7 @@ class I18nRailsCommand(BaseCommand):
 
     def write_text(self, text):
         self.yaml.write_text(text)
-        self.display_message("{0} created!".format(self.selected_text))
+        self.display_message("{0} created!".format(self.selected_text.decode('utf-8')))
 
     def key_parent_notice(self, parent):
         return "The key is the parent of: {0}".format(self.joined_keys(parent)) if not parent is None else ""
@@ -112,7 +112,7 @@ class I18nRailsGoToFileCommand(BaseCommand):
         existing_value = self.existing_value_from_yaml()
 
         if existing_value:
-            self.text_to_display.append( locale + ": " + existing_value )
+            self.text_to_display.append( locale + ": " + existing_value.decode('utf-8') )
         else:
             self.text_to_display.append( locale )
             

@@ -39,8 +39,10 @@ class Yaml():
             value = self.dict[self.last_key] if self.last_key in self.dict else ""
         else:
             value = self.intermediate_value
-
-        return value
+        try:
+            return value.encode('utf-8')
+        except (AttributeError, UnicodeDecodeError):
+            return value
 
     def write_text(self, text):
         with codecs.open(self.locales_path.yaml(), 'w', "utf-8") as yaml_file:
@@ -72,7 +74,7 @@ class Yaml():
     def traverse(self, keys):
         for key in keys:
             if self.should_set_intermediate_value_with(key):
-                self.intermediate_value = "The key {0} is already defined".format(key)
+                self.intermediate_value = "The key {0} is already defined".format(key.encode('utf-8'))
 
             if self.should_initialize_with(key):
                 self.dict[key] = {}

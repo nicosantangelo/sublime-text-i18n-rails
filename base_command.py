@@ -59,7 +59,7 @@ class BaseCommand(sublime_plugin.TextCommand):
         return existing_value if isinstance(existing_value, basestring) else self.key_parent_notice(existing_value)
 
     def joined_keys(self, parent):
-        return ', '.join(list(parent.keys()))
+        return ', '.join(list(parent.keys())).encode('utf-8')
 
     # Override
     def key_parent_notice(self, parent):
@@ -73,7 +73,7 @@ class BaseCommand(sublime_plugin.TextCommand):
         self.view.window().show_quick_panel(items, on_done, sublime.MONOSPACE_FONT)
 
     def show_input_panel(self, caption, initial_text = "", on_done = None, on_change = None, on_cancel = None):
-        self.view.window().show_input_panel(caption, initial_text, on_done, on_change, on_cancel)
+        self.view.window().show_input_panel(caption, initial_text.decode('utf-8'), on_done, on_change, on_cancel)
 
     # Files
     def preview_file(self, index):
