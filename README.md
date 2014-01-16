@@ -34,8 +34,9 @@ The package supports relative and absolute routes, for example
 <%= t('some.other.key.bye') %> <%# It will search in config/locales/*.yml %>
 ````
 
-**Note:** If the package doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`.
-**Note2:** The package requires the root key (`es:`, `en:`, etc.) to be present to work.
+**Notes** 
+ * If the package doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`.
+ * The package requires the root key (`es:`, `en:`, etc.) to be present to work.
 
 ##### Readme
 Because of the way [PyYAML][6], the python yaml parser, dumps the loaded yaml files I can't ensure the file format after a value it's added using this command. I couldn't find a work around this, so I made an [issue][7] wich also contains an (unanswered) stackoverflow question.
@@ -130,8 +131,11 @@ This package is available in [Package Control][2] or you can clone the repo into
  * ~~Support custom color scopes.~~
  * ~~Allow path filtering.~~
 
-## License
-[MIT][3]
+## Copyright
+
+Copyright &copy; 2013+ Nicolás Santángelo. 
+
+See LICENSE for details.
 
   [1]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#shortcut-keys
   [2]: https://sublime.wbond.net/
