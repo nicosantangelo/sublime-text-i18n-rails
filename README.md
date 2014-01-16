@@ -38,7 +38,7 @@ The package supports relative and absolute routes, for example
  * If the package doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`.
  * The package requires the root key (`es:`, `en:`, etc.) to be present to work.
 
-##### Readme
+##### Known "issue"
 Because of the way [PyYAML][6], the python yaml parser, dumps the loaded yaml files I can't ensure the file format after a value it's added using this command. I couldn't find a work around this, so I made an [issue][7] wich also contains an (unanswered) stackoverflow question.
 
 I'm thinking of some way to improve this, but in the meantime if you want to help, any ideas are welcome or just fork away!
@@ -141,6 +141,6 @@ See LICENSE for details.
   [2]: https://sublime.wbond.net/
   [3]: https://raw.github.com/NicoSantangelo/sublime-text-i18n-rails/master/LICENSE
   [4]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#selecting-keys
-  [5]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#readme
+  [5]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#known-issue
   [6]: http://pyyaml.org/
   [7]: https://github.com/NicoSantangelo/sublime-text-i18n-rails/issues/6
