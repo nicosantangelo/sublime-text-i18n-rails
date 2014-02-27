@@ -18,7 +18,7 @@ class BaseCommand(sublime_plugin.TextCommand):
         pass
 
     def in_rails_view(self):
-        return bool(re.search(r'\.(erb|haml)?$', self.view.file_name()))
+        return bool(re.search(r'\.(erb|haml|slim)?$', self.view.file_name()))
 
     def for_each_selected_text(self, func):
         for region in self.get_selection_regions():
