@@ -1,4 +1,4 @@
-# Sublime Text: Rails I18n
+# Sublime Text: I18n Rails
 
 This package is aimed to help you create Internationalization keys.
 
@@ -34,10 +34,11 @@ The package supports relative and absolute routes, for example
 <%= t('some.other.key.bye') %> <%# It will search in config/locales/*.yml %>
 ````
 
-**Note:** If the package doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`.
-**Note2:** The package requires the root key (`es:`, `en:`, etc.) to be present to work.
+**Notes** 
+ * If the package doesn't find the path (for example with `.hello`) it will default to `config/locales/*.yml`.
+ * The package requires the root key (`es:`, `en:`, etc.) to be present to work.
 
-##### Readme
+##### Known "issue"
 Because of the way [PyYAML][6], the python yaml parser, dumps the loaded yaml files I can't ensure the file format after a value it's added using this command. I couldn't find a work around this, so I made an [issue][7] wich also contains an (unanswered) stackoverflow question.
 
 I'm thinking of some way to improve this, but in the meantime if you want to help, any ideas are welcome or just fork away!
@@ -122,7 +123,9 @@ You may have to restart sublime to see the changes.
 
 ## Installation
 
-This package is available in [Package Control][2] or you can clone the repo into your package folder (use Package Control, is awesome).
+This package is available in [Package Control][2] or you can clone the repo into your `/Packages` folder.
+
+The package name is `I18n Rails`.
 
 ## Roadmap
 
@@ -130,13 +133,16 @@ This package is available in [Package Control][2] or you can clone the repo into
  * ~~Support custom color scopes.~~
  * ~~Allow path filtering.~~
 
-## License
-[MIT][3]
+## Copyright
 
-  [1]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#shortcut-keys
+Copyright &copy; 2013+ Nicolás Santángelo. 
+
+See LICENSE for details.
+
+  [1]: https://github.com/NicoSantangelo/sublime-text-i18n-rails/tree/st2#shortcut-keys
   [2]: https://sublime.wbond.net/
-  [3]: https://raw.github.com/NicoSantangelo/sublime-text-i18n-rails/master/LICENSE
-  [4]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#selecting-keys
-  [5]: https://github.com/NicoSantangelo/sublime-text-i18n-rails#readme
+  [3]: https://raw.github.com/NicoSantangelo/sublime-text-i18n-rails/st2/LICENSE
+  [4]: https://github.com/NicoSantangelo/sublime-text-i18n-rails/tree/st2#selecting-keys
+  [5]: https://github.com/NicoSantangelo/sublime-text-i18n-rails/tree/st2#known-issue
   [6]: http://pyyaml.org/
   [7]: https://github.com/NicoSantangelo/sublime-text-i18n-rails/issues/6
