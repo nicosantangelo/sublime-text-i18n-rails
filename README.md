@@ -1,4 +1,4 @@
-# Sublime Text: Rails I18n
+# Sublime Text: I18n Rails
 
 This package is aimed to help you create Internationalization keys.
 
@@ -123,7 +123,9 @@ You may have to restart sublime to see the changes.
 
 ## Installation
 
-This package is available in [Package Control][2] or you can clone the repo into your package folder (use Package Control, is awesome).
+This package is available in [Package Control][2] or you can clone the repo into your `/Packages` folder.
+
+The package name is `I18n Rails`.
 
 ## Roadmap
 
