@@ -1,24 +1,29 @@
-import re
+import sublime_plugin, re
 from .base_command import BaseCommand
 from .yaml import Yaml
 
 # 1. Toggle highlight
 class I18nRailsToggleCommand(BaseCommand):
     def work(self):
-        global i18n_rails_keys_enabled
+        global i18n_rails_keys_disabled
 
         # Default value
-        if not 'i18n_rails_keys_enabled' in globals():
-            i18n_rails_keys_enabled = True 
+        if not 'i18n_rails_keys_disabled' in globals():
+            i18n_rails_keys_disabled = True 
         
-        self.setup_regions()
-
-        if i18n_rails_keys_enabled:
-            self.highlight_keys()
+        if i18n_rails_keys_disabled:
+            self.view.run_command("i18n_rails_highlight")
         else:
-           self.clear_highlighted_keys()
+            self.view.run_command("i18n_rails_clear_highlight")
 
-        i18n_rails_keys_enabled = not i18n_rails_keys_enabled
+        i18n_rails_keys_disabled = not i18n_rails_keys_disabled
+
+
+# 1.a. Add highlight
+class I18nRailsHighlightCommand(BaseCommand):
+    def work(self):
+        self.setup_regions()
+        self.highlight_keys()
 
     def setup_regions(self):
         self.regions = {
@@ -48,20 +53,32 @@ class I18nRailsToggleCommand(BaseCommand):
         translations_count = self.yaml.value_count(key)
 
         if translations_count == locales_len:
-            self.regions['valid'][0].append(region)
+            kind = 'valid'
         elif translations_count > 0:
-            self.regions['partial'][0].append(region)
+            kind = 'partial'
         else:
-            self.regions['invalid'][0].append(region)
+            kind = 'invalid'
+
+        self.add_to_region(kind, region)
+
+    def add_to_region(self, kind, region):
+        self.regions[kind][0].append(region)
 
     def paint_highlighted_keys(self):
         for region_name, regions_tuple in self.regions.items():
             self.add_regions(region_name, regions_tuple[0], regions_tuple[1])
 
+
+# 1.b. Clear highlight
+class I18nRailsClearHighlightCommand(BaseCommand):
+    def work(self):
+        self.clear_highlighted_keys()
+
     def clear_highlighted_keys(self):
-        for region_name in self.regions.keys():
+        for region_name in ['valid', 'partial', 'invalid']:
             self.erase_regions(region_name)
 
+            
 # 2. Add keys
 class I18nRailsCommand(BaseCommand):
     def work(self):
@@ -121,3 +138,9 @@ class I18nRailsGoToFileCommand(BaseCommand):
 
     def key_parent_notice(self, parent):
         return "Parent of %s" % self.joined_keys(parent) if not parent is None else ""
+
+# Callbacks
+class I18nCallbacks(sublime_plugin.EventListener):
+    def on_post_save_async(self, view):
+        if 'i18n_rails_keys_disabled' in globals() and not i18n_rails_keys_disabled:
+            view.run_command("i18n_rails_highlight")

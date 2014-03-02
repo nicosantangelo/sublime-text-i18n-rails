@@ -88,4 +88,3 @@ class BaseCommand(sublime_plugin.TextCommand):
 
     def erase_regions(self, region_name):
         self.view.erase_regions(region_name)
- 
