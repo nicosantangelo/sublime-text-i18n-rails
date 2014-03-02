@@ -5,19 +5,14 @@ from .yaml import Yaml
 # 1. Toggle highlight
 class I18nRailsToggleCommand(BaseCommand):
     def work(self):
-        global i18n_rails_keys_disabled
-
-        # Default value
-        if not 'i18n_rails_keys_disabled' in globals():
-            i18n_rails_keys_disabled = True 
-        
-        if i18n_rails_keys_disabled:
-            self.view.run_command("i18n_rails_highlight")
-        else:
+        if I18nRailsToggleCommand.is_highlighted(self.view):
             self.view.run_command("i18n_rails_clear_highlight")
+        else:
+            self.view.run_command("i18n_rails_highlight")
 
-        i18n_rails_keys_disabled = not i18n_rails_keys_disabled
-
+    @classmethod
+    def is_highlighted(self, view):
+        return view.get_regions("valid") or view.get_regions("partial") or view.get_regions("invalid")
 
 # 1.a. Add highlight
 class I18nRailsHighlightCommand(BaseCommand):
@@ -142,5 +137,5 @@ class I18nRailsGoToFileCommand(BaseCommand):
 # Callbacks
 class I18nCallbacks(sublime_plugin.EventListener):
     def on_post_save_async(self, view):
-        if 'i18n_rails_keys_disabled' in globals() and not i18n_rails_keys_disabled:
+        if I18nRailsToggleCommand.is_highlighted(view):
             view.run_command("i18n_rails_highlight")
