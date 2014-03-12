@@ -107,6 +107,12 @@ If you'd like to customize the color used to hightlight each key, you can add an
 
 You may have to restart sublime to see the changes.
 
+### Reload on save
+
+If this setting is true, the highlighted keys will be updated on each save, so if anything changed it will be picked up hanging the colors appropriately. 
+
+Right now to reload, you need to save the file with the highlighted keys, meaning that the keys wont change if the save is only made in (for example) the .yml file alone.
+
 ## Shortcut Keys
 
 **Windows and Linux:**

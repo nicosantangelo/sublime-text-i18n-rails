@@ -1,4 +1,4 @@
-import sublime_plugin, re
+import sublime, sublime_plugin, re
 from base_command import BaseCommand
 from yaml import Yaml
 
@@ -137,5 +137,7 @@ class I18nRailsGoToFileCommand(BaseCommand):
 # Callbacks
 class I18nCallbacks(sublime_plugin.EventListener):
     def on_post_save(self, view):
-        if I18nRailsToggleCommand.is_highlighted(view):
+        should_reload = sublime.load_settings("I18nRails.sublime-settings").get("reload_highlighted_keys_on_save", False)
+        
+        if should_reload and I18nRailsToggleCommand.is_highlighted(view):
             view.run_command("i18n_rails_highlight")
