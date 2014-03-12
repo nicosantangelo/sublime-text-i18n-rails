@@ -5,5 +5,8 @@
     // Scope names used to highlight the keys
     "valid_color_scope": "comment",
     "partial_color_scope": "string",
-    "invalid_color_scope": "invalid"
+    "invalid_color_scope": "invalid",
+
+    // Reload on save
+    "reload_highlighted_keys_on_save": true
 }
