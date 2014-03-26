@@ -48,9 +48,10 @@ I'm thinking of some way to improve this, but in the meantime if you want to hel
 If you [run][1] "I18n Rails: Go to YAML file" [selecting][4] a key, you will be prompted with the files where the key might be defined, so you can access them quickly (as a tip, you can go back to the file you were editing with the sublime command *jump_back*, *["alt+-""]* by default).
 
 If the translation is found, the quick panel will show it after the locale:
-````
-en.yml: Translation  # with
-es.yml               # without
+
+````yaml
+    en.yml: With translation
+    es.yml              
 ````
 
 ## Selecting keys
@@ -67,7 +68,9 @@ To select a key you can:
     
     "valid_color_scope"  : "comment",
     "partial_color_scope": "string",
-    "invalid_color_scope": "invalid"
+    "invalid_color_scope": "invalid",
+    
+    "reload_highlighted_keys_on_save": true
 }
 ````
 ### Rejected files
@@ -109,7 +112,7 @@ You may have to restart sublime to see the changes.
 
 ### Reload on save
 
-If this setting is true, the highlighted keys will be updated on each save, so if anything changed it will be picked up hanging the colors appropriately. 
+If this setting is true, the highlighted keys will be updated on each save, so if anything changed it will be picked up changing the colors appropriately. 
 
 Right now to reload, you need to save the file with the highlighted keys, meaning that the keys wont change if the save is only made in (for example) the .yml file alone.
 
