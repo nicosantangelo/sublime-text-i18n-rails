@@ -1,9 +1,10 @@
 import os
 
 class Path():
-    def __init__(self, full_path):
+    def __init__(self, full_path, recursive = False):
         self.full = full_path
         self.i18n = self.default_path()
+        self.file_iterator = self.walk_dirs if recursive else self.listdir_fullpath
 
     def default_path(self):
         try:
@@ -42,7 +43,7 @@ class Path():
         return os.path.dirname(self.full)
 
     def file_names(self, extension = "", rejected = []):
-        return [f for f in os.listdir(self.i18n) if self.is_file(f) and self.file_has_extension(f, extension) and f not in rejected]
+        return [f for f in self.file_iterator() if self.is_file(f) and self.file_has_extension(f, extension) and f not in rejected]
 
     def is_file(self, file_path):
         return os.path.isfile(os.path.join(self.i18n, file_path))
@@ -58,7 +59,17 @@ class Path():
         file_path = file_path or self.full
         return os.path.basename(file_path)
 
+    # Iterators
+    def walk_dirs(self):
+        for dir, _, files in os.walk(self.i18n):
+            for file in files:
+                yield os.path.join(dir, file)
+
+    def listdir_fullpath(self):
+        for file in os.listdir(self.i18n):
+            yield os.path.join(self.i18n, file)
+
     @classmethod
     def remove_extension(cls, file_name):
-        name, sep, ext = file_name.partition(".")
+        name, sep, ext = os.path.basename(file_name).partition(".")
         return name

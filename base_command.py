@@ -9,7 +9,7 @@ class BaseCommand(sublime_plugin.TextCommand):
 
         self.settings = sublime.load_settings("I18nRails.sublime-settings")
 
-        self.locales_path = LocalesPath(self.view.file_name())
+        self.locales_path = LocalesPath(self.view.file_name(), self.settings.get("recursive", False))
 
         self.work()
 

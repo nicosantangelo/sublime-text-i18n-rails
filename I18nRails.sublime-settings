@@ -8,5 +8,8 @@
     "invalid_color_scope": "invalid",
 
     // Reload on save
-    "reload_highlighted_keys_on_save": true
+    "reload_highlighted_keys_on_save": true,
+
+    // If true, it will search for the keys on every yml file in your config/locales folder
+    "recursive": false
 }

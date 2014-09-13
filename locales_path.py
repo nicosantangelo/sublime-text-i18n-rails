@@ -2,9 +2,9 @@ from .locales import Locales
 from .path    import Path
 
 class LocalesPath():
-    def __init__(self, full_path):
+    def __init__(self, full_path, recursive = False):
         # Path helper
-        self.path = Path(full_path)
+        self.path = Path(full_path, recursive)
 
         # Every locale will be stored here
         self.locales = Locales()
@@ -28,7 +28,7 @@ class LocalesPath():
         return self.locales.process()
 
     def yaml(self):
-        return self.path.i18n + self.locales.current_locale
+        return self.locales.current_locale
 
     def locale_name(self):
         return Path.remove_extension(self.locales.current_locale)
