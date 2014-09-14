@@ -67,7 +67,7 @@ class BaseCommand(sublime_plugin.TextCommand):
 
     # Panels and message
     def display_message(self, text):
-        sublime.active_window().active_view().set_status("i18_rails", text)
+        sublime.status_message("i18_rails: %s" % text)
 
     def show_quick_panel(self, items, on_done, on_highlighted, selected_index = -1):
         self.view.window().show_quick_panel(items, on_done, sublime.MONOSPACE_FONT, selected_index, on_highlighted)
