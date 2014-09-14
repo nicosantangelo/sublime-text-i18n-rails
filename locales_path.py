@@ -21,7 +21,7 @@ class LocalesPath():
     def for_each_process(self, func):
         locale = self.process()
         while locale:
-            func(locale)
+            func(self.path.relevant_path(locale))
             locale = self.process()
 
     def process(self):

@@ -4,6 +4,7 @@ class Path():
     def __init__(self, full_path, recursive = False):
         self.full = full_path
         self.i18n = self.default_path()
+        self.recursive = recursive
         self.file_iterator = self.walk_dirs if recursive else self.listdir_fullpath
 
     def default_path(self):
@@ -59,6 +60,9 @@ class Path():
         file_path = file_path or self.full
         return os.path.basename(file_path)
 
+    def relevant_path(self, path):
+        return path.partition("locales/")[2] if self.recursive else Path.basename(path)
+
     # Iterators
     def walk_dirs(self):
         for dir, _, files in os.walk(self.i18n):
@@ -71,5 +75,9 @@ class Path():
 
     @classmethod
     def remove_extension(cls, file_name):
-        name, sep, ext = os.path.basename(file_name).partition(".")
+        name, sep, ext = cls.basename(file_name).partition(".")
         return name
+        
+    @classmethod
+    def basename(cls, file_name):
+        return os.path.basename(file_name)
