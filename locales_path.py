@@ -21,11 +21,11 @@ class LocalesPath():
     def for_each_process(self, func):
         locale = self.process()
         while locale:
-            func(self.path.relevant_path(locale))
+            func(locale)
             locale = self.process()
 
     def process(self):
-        return self.locales.process()
+        return self.path.relevant_path(self.locales.process())
 
     def yaml(self):
         return self.locales.current_locale
@@ -35,6 +35,12 @@ class LocalesPath():
 
     def locales_len(self):
         return len(self.locales.names)
+
+    def all_names(self):
+        return [self.path.relevant_path(locale) for locale in self.locales.names]
+
+    def get_by_index(self, index):
+        return self.locales.get(index)
 
     def splitted_keys(self):
         return self.path_after_views().split("/") + [self.rails_view_file_name()]

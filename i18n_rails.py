@@ -91,7 +91,17 @@ class I18nRailsCommand(BaseCommand):
         if user_text:
             self.write_text(user_text)
 
-        locale = self.locales_path.process()
+        if self.settings.get("recursive", False):
+            self.show_quick_panel(self.locales_path.all_names(), self.path_selected, None)
+        else:
+            locale = self.locales_path.process()
+            self.prompt_to_write_translation(locale)
+
+    def path_selected(self, index):
+        locale = self.locales_path.get_by_index(index)
+        self.prompt_to_write_translation(locale)
+
+    def prompt_to_write_translation(self, locale):
         if locale:
             existing_value = self.existing_value_from_yaml()
             self.show_input_panel(locale, existing_value, self.write_and_show_input, None, self.write_and_show_input)

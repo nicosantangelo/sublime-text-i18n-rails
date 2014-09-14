@@ -61,6 +61,8 @@ class Path():
         return os.path.basename(file_path)
 
     def relevant_path(self, path):
+        if not path:
+            return path
         return path.partition("locales/")[2] if self.recursive else Path.basename(path)
 
     # Iterators

@@ -9,3 +9,8 @@ class Locales():
     def process(self):
         self.current_locale = self.names.pop() if len(self.names) > 0 else None
         return self.current_locale
+
+    def get(self, index):
+        if index >= 0 and index < len(self.names):
+            self.current_locale = list(self.names)[index]
+            return self.current_locale
