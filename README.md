@@ -1,6 +1,6 @@
 # Sublime Text: I18n Rails
 
-This package is aimed to help you create Rails Internationalization keys. The Sublime Text 2 version is no longer being updated with new features; you can still download from Package Control or you can find it [here](https://github.com/NicoSantangelo/sublime-text-i18n-rails/tree/st2).
+This package is aimed to help you create Rails Internationalization keys. The Sublime Text 2 version is no longer being updated with *new* features; you can still download it from Package Control or you can find it [here](https://github.com/NicoSantangelo/sublime-text-i18n-rails/tree/st2).
 
 ## Available commands
 
