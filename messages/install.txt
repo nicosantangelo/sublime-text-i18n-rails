@@ -1,6 +1,11 @@
 QuickStart (sorry for the interruption)
 =======================================
 
+**Important**
+This version of the package will not be getting updates with new features that may be added to the Sublime Text 3 version (if you have an issue, I'll be more than happy to help).
+
+Features:
+
 1) Also If you want to check which keys in the file are present in the `*.yml` files, you can open up a Rails view and run the command "I18n Rails: Toggle key highlighting"
 
 Each translation is looked up in the relative or absolute path (the same logic applied for adding the values) and colored by:
