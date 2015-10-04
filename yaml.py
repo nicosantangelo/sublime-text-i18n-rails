@@ -57,7 +57,7 @@ class Yaml():
 
     def write_file(self, yaml_file):
         yaml_file.seek(0)
-        yaml_file.write( pyyaml.dump(self.yaml_to_write, default_flow_style = False, allow_unicode = True, encoding = None) )
+        yaml_file.write( pyyaml.dump(self.yaml_to_write, default_flow_style = False, allow_unicode = True, encoding = None, width = 1000) )
         yaml_file.truncate()
 
     def value_count(self, key):
